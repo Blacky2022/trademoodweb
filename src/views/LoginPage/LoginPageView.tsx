@@ -6,8 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './validationSchema'
 import { theme } from '../../styles/colors'
 import TextFieldController from '../../components/TextFieldComponent'
+//@typescript-ignore
 import * as AuthProvider from '../../store/AuthProvider'
-
 
 interface LoginForm {
 	email: string
@@ -19,7 +19,7 @@ export default function LoginPageView() {
 	const navigate = useNavigate()
 	const { login } = AuthProvider.useAuth()
 	const {
-    control,
+		control,
 		handleSubmit,
 		setError,
 		formState: { errors },
@@ -47,7 +47,7 @@ export default function LoginPageView() {
 			setIsSubmitting(false) // Set isSubmitting to false after login request
 		}
 	}
-  const styles = {
+	const styles = {
 		container: {
 			display: 'flex',
 			flexDirection: 'column' as 'column',
@@ -105,7 +105,7 @@ export default function LoginPageView() {
 		},
 	}
 
-  return (
+	return (
 		<div style={styles.container}>
 			<Box style={styles.boxContainer}>
 				<img src='/assets/logo/trademoodicon.png' alt='Logo' style={styles.logo} />

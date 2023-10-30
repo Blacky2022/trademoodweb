@@ -3,15 +3,15 @@ import { Paper, Stack, Button, Typography, Link, CircularProgress } from '@mui/m
 import { FieldValues, useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../store/AuthProvider'
+//@typescript-ignore
+import * as AuthProvider from '../../store/AuthProvider'
 import { schema } from './validationSchema'
 import TextFieldController from '../../components/TextFieldComponent'
 import { theme } from '../../styles/colors'
 import { Box } from '@mui/material'
 
-
 const RegisterPageView: React.FC = () => {
-	const { register } = useAuth()
+	const { register } = AuthProvider.useAuth()
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const navigate = useNavigate()
 	const [message, setMessage] = React.useState<string | null>(null)
@@ -116,14 +116,13 @@ const RegisterPageView: React.FC = () => {
 			<Box style={styles.boxContainer}>
 				<img src='/assets/logo/trademoodicon.png' alt='Logo' style={styles.logo} />
 				<Paper style={styles.paper} elevation={3}>
-				<Typography
-          variant='h5'
-          style={{
-            color: theme.dark.TERTIARY 
-          }}
-        >
-          Sign Up
-        </Typography>
+					<Typography
+						variant='h5'
+						style={{
+							color: theme.dark.TERTIARY,
+						}}>
+						Sign Up
+					</Typography>
 					<form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
 						<Stack spacing={2}>
 							<TextFieldController name='firstName' label='First Name' control={control} errors={errors} />
