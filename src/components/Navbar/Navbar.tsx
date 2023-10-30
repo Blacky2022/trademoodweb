@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Avatar, Typography, AppBar, Toolbar, Box } from '@mui/material'
 import { theme } from '../../styles/colors'
-
+import { AuthContext }  from '../../store/AuthProvider'
 const styles = {
 	navbar: {
 		backgroundColor: theme.dark.BACKGROUND,
@@ -31,7 +31,10 @@ interface NavbarProps {
 	onMenuClick: () => void
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentView, userName, onMenuClick }) => {
+const Navbar: React.FC<NavbarProps> = ({ currentView, onMenuClick }) => {
+	
+	const { user } = useContext(AuthContext); // Destructuring to get the user object
+
 	return (
 		<AppBar position='static' style={styles.navbar as React.CSSProperties}>
 			<Toolbar>
@@ -47,7 +50,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, userName, onMenuClick }) =
 				<Box style={styles.userSection as React.CSSProperties}>
 					<Avatar src={'avatar.jpg'} style={styles.userAvatar as React.CSSProperties} />
 					<Typography variant='h6' style={styles.userName as React.CSSProperties}>
-						Hello, {userName}!
+						Hello, {user?.displayName}!
 					</Typography>
 				</Box>
 			</Toolbar>

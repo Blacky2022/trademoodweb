@@ -1,37 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import { useAuth } from '../store/AuthProvider'
-import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '../config/firebase-config'
-import HomeStack from './home-stack/HomeStack'
-import AuthStack from './auth-stack/AuthStack'
+import React, { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { useAuth } from '../store/AuthProvider';
+import { onAuthStateChanged } from 'firebase/auth';
+import HomeStack from './home-stack/HomeStack';
+import AuthStack from './auth-stack/AuthStack';
+import { auth } from '../config/firebase-config';
 
 function AppRoutes() {
-	const { user, setUser } = useAuth()
-	const [initializing, setInitializing] = useState(true)
+  const { user, setUser } = useAuth();
+  const [initializing, setInitializing] = useState(true);
+
   useEffect(() => {
-    console.log('User State Changed:', user);
-  }, [user]);
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, currentUser => {
-			console.log('Auth State Changed:', currentUser)
-			setUser(currentUser)
-			if (initializing) {
-				setInitializing(false)
-			}
-		})
-		return () => unsubscribe()
-	}, [initializing, setUser])
+    const subscriber = onAuthStateChanged(auth, (newUser) => {
+      setUser(newUser);
+	  console.log('User status on component mount:', user)
+      if (initializing) {
+        setInitializing(false);
+      }
+    });
 
-	if (initializing) {
-		return <div>Loading...</div>
-	}
+    return subscriber; // unsubscribe on unmount
+  }, [initializing, setUser]);
 
-	return (
-		<Routes>
-			<Route path='/*' element={user ? <HomeStack /> : <AuthStack />} />
-		</Routes>
-	)
+  if (initializing) {
+    return null; // or some kind of loader
+  }
+
+  return (
+    <Routes>
+      <Route path='/*' element={user ?  <HomeStack />: <AuthStack /> } />
+    </Routes>
+  );
 }
 
-export default AppRoutes
+export default AppRoutes;

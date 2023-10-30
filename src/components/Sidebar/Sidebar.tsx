@@ -9,9 +9,10 @@ import MarketIcon from '@mui/icons-material/Storefront'
 import TrendIcon from '@mui/icons-material/TrendingUp'
 import NotificationIcon from '@mui/icons-material/Notifications'
 import LogOutIcon from '@mui/icons-material/ExitToApp'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
-
+import { useAuth } from '../../store/AuthProvider'
+import { useNavigate } from 'react-router-dom'
 const styles = {
 	activeListItem: {
 		backgroundColor: theme.dark.LIGHT_HINT, // You can adjust this to your theme
@@ -60,7 +61,7 @@ const styles = {
 
 const menuItems = [
 	{ text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
-	{ text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard', hasArrow: true },
+	{ text: 'Dashboard', icon: <DashboardIcon />, path: '/', hasArrow: true },
 	{ text: 'Community', icon: <CommunityIcon />, path: '/community' },
 	{ text: 'Market', icon: <MarketIcon />, path: '/market' },
 	{ text: 'Trends', icon: <TrendIcon />, path: '/trends' },
@@ -71,10 +72,19 @@ type SidebarProps = {
 	currentView: string
 	onMenuClick?: (view: string) => void
 }
-
 const Sidebar: React.FC<SidebarProps> = ({ currentView, onMenuClick }) => {
+	const { logout } = useAuth()
 	const location = useLocation()
-
+	const navigate = useNavigate()
+const handleLogout = async () => {
+	try {
+		await logout();
+		navigate('/')
+	} catch (error) {
+		console.error('Logout failed', error);
+		// Optionally, show an error message to the user
+	}
+}
 	const handleClick = (view: string) => {
 		if (onMenuClick) {
 			onMenuClick(view)
@@ -104,7 +114,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onMenuClick }) => {
 					</React.Fragment>
 				))}
 			</List>
-			<Button variant='outlined' color='inherit' startIcon={<LogOutIcon />} style={styles.logoutButton}>
+			<Button
+				variant='outlined'
+				color='inherit'
+				startIcon={<LogOutIcon />}
+				style={styles.logoutButton}
+				onClick={handleLogout}
+			>
 				LogOut
 			</Button>
 		</Paper>

@@ -1,104 +1,57 @@
-import React, { useState } from 'react'
-import { mixed, object, string, ref, ObjectSchema } from 'yup'
-import { ValidationError } from 'yup'
-import { TextField, Button, CircularProgress, Typography, Input, Stack, Link, Paper } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Paper, Stack, Button, Typography, Link, CircularProgress } from '@mui/material'
+import { FieldValues, useForm, SubmitHandler } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
-import {useAuth} from "../../store/AuthProvider"
-
-interface SignupForm {
-	firstName: string
-	lastName: string
-	email: string
-	password: string
-	confirmPassword: string
-	photo: any
-}
-
-const schema: ObjectSchema<SignupForm> = object().shape({
-	firstName: string()
-		.max(25, 'Your first name is too long')
-		.matches(/^[a-zA-Z-]+$/, 'Please enter a valid first name')
-		.required('Please provide your first name'),
-	lastName: string()
-		.max(25, 'Your last name is too long')
-		.matches(/^[a-zA-Z-]+$/, 'Please enter a valid last name')
-		.required('Please provide your last name'),
-	email: string().email('Email is not valid').required('Please provide your email'),
-	password: string().min(6, 'Password must be at least 6 characters').required('Please provide your password'),
-	confirmPassword: string()
-		.min(6, 'Password must be at least 6 characters')
-		.oneOf([ref('password')], 'Password must match')
-		.required('Password must match'),
-	photo: mixed<File>()
-		.test('file', 'Must be a File', value => !value || value instanceof File)
-		.notRequired(),
-})
+import { useAuth } from '../../store/AuthProvider'
+import { schema } from './validationSchema'
+import TextFieldController from '../../components/TextFieldComponent'
+import { theme } from '../../styles/colors'
+import { Box } from '@mui/material'
 
 const RegisterPageView: React.FC = () => {
-	const [form, setForm] = useState<SignupForm>({
-		firstName: '',
-		lastName: '',
-		email: '',
-		password: '',
-		confirmPassword: '',
-		photo: null,
-	})
-	const {
-		register,  // This function is now available from our AuthProvider
-		updateProfilePicture,  // If you want to update the profile picture
-	  } = useAuth();  // Get our auth functions
+	const [isSubmitting, setIsSubmitting] = useState(false)
+	const { register } = useAuth()
 	const navigate = useNavigate()
-	const [errors, setErrors] = useState<Partial<SignupForm>>({})
-	const [isLoading, setIsLoading] = useState(false)
-	const [message, setMessage] = useState<string | null>(null)
-	const handleNavigateToLogin = () => {
-		navigate('/login')
-	}
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setIsLoading(true);
+	const [message, setMessage] = React.useState<string | null>(null)
+	const {
+		control,
+		handleSubmit,
+		setError,
+		formState: { errors },
+	} = useForm({
+		resolver: yupResolver(schema),
+	})
+	const onSubmit: SubmitHandler<FieldValues> = async ({ firstName, lastName, email, password, confirmPassword }) => {
+		setIsSubmitting(true)
 		try {
-		  await schema.validate(form, { abortEarly: false });
-		  await register(
-			form.email,
-			form.password,
-			form.firstName,
-			form.lastName,
-			form.photo ? form.photo.name : null  // Assuming you handle image URLs differently
-		  );
-		  if (form.photo) {
-			await updateProfilePicture(form.photo);
-		  }
-	
-		  setMessage('User signed up successfully!');
-		  navigate('/dashboard');
-	
-		  // Reset form
-		  setForm({
-			firstName: '',
-			lastName: '',
-			email: '',
-			password: '',
-			confirmPassword: '',
-			photo: null,
-		  });
-	
-		  navigate('/main');
+			await register(email, password, firstName, lastName).then()
+			navigate('/')
 		} catch (error: any) {
-		  if (error instanceof ValidationError) {
-			const validationErrors: Partial<SignupForm> = {};
-			error.inner.forEach(err => {
-			  validationErrors[err.path as keyof SignupForm] = err.message;
-			});
-			setErrors(validationErrors);
-		  } else {
-			// Handle other types of errors (possibly from Firebase)
-			setMessage(error.message);
-		  }
+			console.log(error)
+			if (error.code === 'auth/email-already-in-use') {
+				setError('email', { message: 'That email address is already in use' })
+			} else if (error.code === 'auth/weak-password') {
+				setError('password', { message: 'Password is too weak' })
+			} else if (error.code === 'auth/invalid-email') {
+				setError('email', { message: 'Email is not valid' })
+			} else if (error.code === 'auth/operation-not-allowed') {
+				setError('email', { message: 'Internal error, please try again later' })
+			} else {
+				setError('email', { message: 'Internal error, please try again later' })
+				setError('password', { message: 'Internal error, please try again later' })
+				setError('confirmPassword', { message: 'Internal error, please try again later' })
+			}
 		} finally {
-		  setIsLoading(false);
+			setIsSubmitting(false)
 		}
-	  };
+	}
+	useEffect(() => {
+		if (Object.keys(errors).length > 0) {
+			setMessage('Please fix the errors before submitting.')
+		}
+	}, [errors])
+
 	const styles = {
 		container: {
 			display: 'flex',
@@ -106,131 +59,113 @@ const RegisterPageView: React.FC = () => {
 			alignItems: 'center',
 			justifyContent: 'center',
 			height: '100vh',
-			padding: 2,
+			padding: 16,
+			backgroundColor: theme.dark.BACKGROUND,
+			color: theme.dark.TERTIARY,
+		},
+		boxContainer: {
+			display: 'flex',
+			flexDirection: 'column' as 'column',
+			alignItems: 'center',
+			justifyContent: 'center',
+			width: '100%',
+			maxWidth: 400,
+			marginBottom: 20,
+		},
+		logo: {
+			marginBottom: 20,
+			maxWidth: '100%', // Ensures the logo is responsive and doesn't overflow the container
+			height: 'auto',
 		},
 		paper: {
 			display: 'flex',
 			flexDirection: 'column' as 'column',
 			alignItems: 'center',
-			padding: 2,
+			padding: 16,
 			width: '100%',
-			maxWidth: '400px',
-			marginTop: 2,
+			backgroundColor: theme.dark.BACKGROUND,
 		},
 		form: {
 			width: '100%',
 		},
 		submit: {
 			margin: '16px 0px',
+			backgroundColor: theme.dark.PRIMARY,
+			color: theme.dark.TERTIARY,
+			'&:hover': {
+				backgroundColor: theme.dark.SECONDARY,
+			},
 		},
 		progress: {
-			color: '#fff',
+			color: theme.dark.TERTIARY,
 		},
 		message: {
-			marginTop: 2,
+			marginTop: 8,
+			color: theme.dark.TERTIARY,
 		},
 		link: {
-			marginTop: 2,
+			marginTop: 16,
 			textAlign: 'center' as 'center',
+			color: theme.dark.TERTIARY,
 		},
 	}
 
 	return (
-		<>
-			{' '}
-			<div style={styles.container}>
+		<div style={styles.container}>
+			<Box style={styles.boxContainer}>
+				<img src='/assets/logo/trademoodicon.png' alt='Logo' style={styles.logo} />
 				<Paper style={styles.paper} elevation={3}>
-					<form onSubmit={handleSubmit}>
+				<Typography
+          variant='h5'
+          style={{
+            color: theme.dark.TERTIARY 
+          }}
+        >
+          Sign Up
+        </Typography>
+					<form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
 						<Stack spacing={2}>
-							<TextField
-								label='First Name'
-								variant='outlined'
-								value={form.firstName}
-								onChange={e => setForm({ ...form, firstName: e.target.value })}
-								error={Boolean(errors.firstName)}
-								helperText={errors.firstName}
-							/>
-
-							<TextField
-								label='Last Name'
-								variant='outlined'
-								value={form.lastName}
-								onChange={e => setForm({ ...form, lastName: e.target.value })}
-								error={Boolean(errors.lastName)}
-								helperText={errors.lastName}
-							/>
-
-							<TextField
-								label='Email'
-								variant='outlined'
-								type='email'
-								value={form.email}
-								onChange={e => setForm({ ...form, email: e.target.value })}
-								error={Boolean(errors.email)}
-								helperText={errors.email}
-							/>
-
-							<TextField
-								label='Password'
-								variant='outlined'
-								type='password'
-								value={form.password}
-								onChange={e => setForm({ ...form, password: e.target.value })}
-								error={Boolean(errors.password)}
-								helperText={errors.password}
-							/>
-
-							<TextField
+							<TextFieldController name='firstName' label='First Name' control={control} errors={errors} />
+							<TextFieldController name='lastName' label='Last Name' control={control} errors={errors} />
+							<TextFieldController name='email' label='Email' type='email' control={control} errors={errors} />
+							<TextFieldController name='password' label='Password' type='password' control={control} errors={errors} />
+							<TextFieldController
+								name='confirmPassword'
 								label='Confirm Password'
-								variant='outlined'
 								type='password'
-								value={form.confirmPassword}
-								onChange={e => setForm({ ...form, confirmPassword: e.target.value })}
-								error={Boolean(errors.confirmPassword)}
-								helperText={errors.confirmPassword}
+								control={control}
+								errors={errors}
 							/>
-
-							<Input
-								type='file'
-								inputProps={{
-									accept: 'image/*',
-								}}
-								onChange={e => {
-									const target = e.target as HTMLInputElement
-									const file = target.files ? target.files[0] : null
-									setForm({ ...form, photo: file })
-								}}
-								sx={{
-									display: 'block',
-									marginTop: '1rem',
-								}}
-							/>
-
 							<Button
 								type='submit'
 								variant='contained'
-								disabled={isLoading}
-								sx={{
-									height: '3rem',
-								}}
-								startIcon={isLoading && <CircularProgress size={24} />}>
-								{isLoading ? 'Signing Up...' : 'Sign Up'}
+								style={styles.submit}
+								disabled={isSubmitting}
+								startIcon={isSubmitting && <CircularProgress size={24} style={styles.progress} />}>
+								{isSubmitting ? 'Submitting...' : 'Sign Up'}
 							</Button>
 						</Stack>
-
-						<Typography variant='body2' sx={{ marginTop: '1rem' }}>
-							{message}
-						</Typography>
+						{message && (
+							<Typography variant='body2' style={styles.message}>
+								{message}
+							</Typography>
+						)}
 					</form>
 				</Paper>
-				<Typography variant='body2' color='textSecondary' style={styles.link}>
-					Already have an account?{' '}
-					<Link href='#' onClick={handleNavigateToLogin} variant='body2'>
-						Sign In
-					</Link>
-				</Typography>
-			</div>
-		</>
+			</Box>
+			<Typography variant='body2' style={styles.link}>
+				Already have an account?{' '}
+				<Link
+					href='#'
+					onClick={e => {
+						e.preventDefault()
+						navigate('/')
+					}}
+					variant='body2'>
+					Sign in
+				</Link>
+			</Typography>
+		</div>
 	)
 }
 
