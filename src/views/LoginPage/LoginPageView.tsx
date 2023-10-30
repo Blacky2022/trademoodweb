@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import { Button, TextField, Typography, Link, Box, Paper, CircularProgress } from '@mui/material'
-
-import { useAuth } from '../../store/AuthProvider'
+import { Button, Stack, Typography, Link, Box, Paper, CircularProgress } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './validationSchema'
 import { theme } from '../../styles/colors'
+import TextFieldController from '../../components/TextFieldComponent'
+import * as AuthProvider from '../../store/AuthProvider'
+
+
 interface LoginForm {
 	email: string
 	password: string
@@ -15,9 +17,9 @@ export default function LoginPageView() {
 	const [message, setMessage] = useState<string | null>(null)
 	const [isSubmitting, setIsSubmitting] = useState(false) // Add isSubmitting state
 	const navigate = useNavigate()
-	const { login } = useAuth()
+	const { login } = AuthProvider.useAuth()
 	const {
-		register,
+    control,
 		handleSubmit,
 		setError,
 		formState: { errors },
@@ -45,96 +47,105 @@ export default function LoginPageView() {
 			setIsSubmitting(false) // Set isSubmitting to false after login request
 		}
 	}
+  const styles = {
+		container: {
+			display: 'flex',
+			flexDirection: 'column' as 'column',
+			alignItems: 'center',
+			justifyContent: 'center',
+			height: '100vh',
+			padding: 16,
+			backgroundColor: theme.dark.BACKGROUND,
+			color: theme.dark.TERTIARY,
+		},
+		boxContainer: {
+			display: 'flex',
+			flexDirection: 'column' as 'column',
+			alignItems: 'center',
+			justifyContent: 'center',
+			width: '100%',
+			maxWidth: 400,
+			marginBottom: 20,
+		},
+		logo: {
+			marginBottom: 20,
+			maxWidth: '100%', // Ensures the logo is responsive and doesn't overflow the container
+			height: 'auto',
+		},
+		paper: {
+			display: 'flex',
+			flexDirection: 'column' as 'column',
+			alignItems: 'center',
+			padding: 16,
+			width: '100%',
+			backgroundColor: theme.dark.BACKGROUND,
+		},
+		form: {
+			width: '100%',
+		},
+		submit: {
+			margin: '16px 0px',
+			backgroundColor: theme.dark.PRIMARY,
+			color: theme.dark.TERTIARY,
+			'&:hover': {
+				backgroundColor: theme.dark.SECONDARY,
+			},
+		},
+		progress: {
+			color: theme.dark.TERTIARY,
+		},
+		message: {
+			marginTop: 8,
+			color: theme.dark.TERTIARY,
+		},
+		link: {
+			marginTop: 16,
+			textAlign: 'center' as 'center',
+			color: theme.dark.TERTIARY,
+		},
+	}
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh', // Vertically center the content
-        backgroundColor: theme.dark.BACKGROUND, // Background color from your theme
-        color: theme.dark.QUATERNARY, // Text color from your theme
-      }}
-    >
-      <Paper
-        style={{
-          padding: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          backgroundColor: theme.dark.PRIMARY,
-        }}
-      >
-        <img src='/assets/logo/trademoodicon.png' alt='Logo' style={{ maxWidth: '100%', height: 'auto' }} />
-        <Typography
-          variant='h5'
-          style={{
-            color: theme.dark.QUATERNARY, 
-          }}
-        >
-          Sign In
-        </Typography>
-        <Box component='form' noValidate sx={{ mt: 2 }}>
-          <TextField
-            margin='normal'
-            required
-            fullWidth
-            label='Email Address'
-            autoComplete='email'
-            autoFocus
-            {...register('email')}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-            sx={{
-              backgroundColor: theme.dark.BACKGROUND, 
-              color: theme.dark.QUATERNARY, 
-              borderRadius: '4px',
-              marginBottom: '16px',
-            }}
-          />
-          <TextField
-            margin='normal'
-            required
-            fullWidth
-            label='Password'
-            type='password'
-            autoComplete='current-password'
-            {...register('password')}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            sx={{
-              backgroundColor: theme.dark.BACKGROUND, 
-              color: theme.dark.QUATERNARY, 
-              borderRadius: '4px',
-              marginBottom: '16px',
-            }}
-          />
-          <Button
-            onClick={handleSubmit(onSubmit)}
-            type='submit'
-            fullWidth
-            variant='contained'
-            style={{
-              backgroundColor: theme.dark.BACKGROUND, 
-              color: theme.dark.TERTIARY, 
-            }}
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <CircularProgress size={24} sx={{ color: theme.dark.TERTIARY, position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />}
-            Sign In
-          </Button>
-          {message && (
-            <Typography variant='body2' color='textSecondary' style={{ marginTop: '16px' }}>
-              {message}
-            </Typography>
-          )}
-          <Link href='#' variant='body2' onClick={() => navigate('/register')} sx={{ marginTop: '16px', color: theme.dark.TERTIARY }}>
-            {"Don't have an account? Register"}
-          </Link>
-        </Box>
-      </Paper>
-    </Box>
-  );
+		<div style={styles.container}>
+			<Box style={styles.boxContainer}>
+				<img src='/assets/logo/trademoodicon.png' alt='Logo' style={styles.logo} />
+				<Paper style={styles.paper} elevation={3}>
+					<Typography variant='h5' style={{ color: theme.dark.TERTIARY }}>
+						Login
+					</Typography>
+					<form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
+						<Stack spacing={2}>
+							<TextFieldController name='email' label='Email' type='email' control={control} errors={errors} />
+							<TextFieldController name='password' label='Password' type='password' control={control} errors={errors} />
+							<Button
+								type='submit'
+								variant='contained'
+								style={styles.submit}
+								disabled={isSubmitting}
+								startIcon={isSubmitting && <CircularProgress size={24} style={styles.progress} />}>
+								{isSubmitting ? 'Logging in...' : 'Login'}
+							</Button>
+						</Stack>
+						{message && (
+							<Typography variant='body2' style={styles.message}>
+								{message}
+							</Typography>
+						)}
+					</form>
+				</Paper>
+			</Box>
+			<Typography variant='body2' style={styles.link}>
+				Don't have an account?{' '}
+				<Link
+					href='#'
+					onClick={e => {
+						e.preventDefault()
+						navigate('/register') // navigate to register page
+					}}
+					variant='body2'>
+					Sign Up
+				</Link>
+			</Typography>
+		</div>
+	)
 }

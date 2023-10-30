@@ -9,9 +9,9 @@ import MarketIcon from '@mui/icons-material/Storefront'
 import TrendIcon from '@mui/icons-material/TrendingUp'
 import NotificationIcon from '@mui/icons-material/Notifications'
 import LogOutIcon from '@mui/icons-material/ExitToApp'
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
-import { useAuth } from '../../store/AuthProvider'
+import * as AuthProvider from '../../store/AuthProvider'
 import { useNavigate } from 'react-router-dom'
 const styles = {
 	activeListItem: {
@@ -73,7 +73,7 @@ type SidebarProps = {
 	onMenuClick?: (view: string) => void
 }
 const Sidebar: React.FC<SidebarProps> = ({ currentView, onMenuClick }) => {
-	const { logout } = useAuth()
+	const { logout } = AuthProvider.useAuth()
 	const location = useLocation()
 	const navigate = useNavigate()
 const handleLogout = async () => {

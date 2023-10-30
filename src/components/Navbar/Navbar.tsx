@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Avatar, Typography, AppBar, Toolbar, Box } from '@mui/material'
 import { theme } from '../../styles/colors'
-import { AuthContext }  from '../../store/AuthProvider'
+import { AuthContext } from '../../store/AuthProvider'
 const styles = {
 	navbar: {
 		backgroundColor: theme.dark.BACKGROUND,

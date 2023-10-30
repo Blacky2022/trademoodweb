@@ -16,7 +16,7 @@ import { getFirestore } from 'firebase/firestore'
 import { auth, firestore } from '../config/firebase-config'
 // You might need to import a Snackbar or another notification library suitable for web apps
 
-type AuthContextType = {
+export type AuthContextType = {
 	user: User | null
 	setUser: React.Dispatch<React.SetStateAction<User | null>>
 	login: (email: string, password: string) => Promise<void>
@@ -44,7 +44,7 @@ export const AuthContext = createContext<AuthContextType>({
 	updatePassword: async () => {},
 })
 
-type AuthProviderProps = {
+export type AuthProviderProps = {
 	children: ReactNode
 }
 
@@ -71,7 +71,7 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 				setUser,
 				login: async (email: string, password: string) => {
 					await signInWithEmailAndPassword(auth, email, password)
-					console.log('user logged in')
+					console.log('user logged')
 				},
 				register: async (email: string, password: string, firstName: string, lastName: string) => {
 					try {

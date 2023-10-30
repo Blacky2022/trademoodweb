@@ -9,9 +9,10 @@ import TextFieldController from '../../components/TextFieldComponent'
 import { theme } from '../../styles/colors'
 import { Box } from '@mui/material'
 
+
 const RegisterPageView: React.FC = () => {
-	const [isSubmitting, setIsSubmitting] = useState(false)
 	const { register } = useAuth()
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const navigate = useNavigate()
 	const [message, setMessage] = React.useState<string | null>(null)
 	const {

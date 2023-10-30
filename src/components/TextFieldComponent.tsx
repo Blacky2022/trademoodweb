@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField } from "@mui/material";
-import { Controller, Control, FieldValues, FieldPath, FieldError, FieldErrorsImpl } from "react-hook-form";
+import { Controller, Control, FieldValues, FieldPath,  FieldErrorsImpl } from "react-hook-form";
 import {theme} from "../styles/colors"
 const styles = {
   textField: {
