@@ -6,8 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './validationSchema'
 import { theme } from '../../styles/colors'
 import TextFieldController from '../../components/TextFieldComponent'
-//@typescript-ignore
-import * as AuthProvider from '../../store/AuthProvider'
+import { useAuth } from '../../store/AuthProvider'
 
 interface LoginForm {
 	email: string
@@ -17,7 +16,7 @@ export default function LoginPageView() {
 	const [message, setMessage] = useState<string | null>(null)
 	const [isSubmitting, setIsSubmitting] = useState(false) // Add isSubmitting state
 	const navigate = useNavigate()
-	const { login } = AuthProvider.useAuth()
+	const { login } = useAuth()
 	const {
 		control,
 		handleSubmit,

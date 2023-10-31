@@ -1,20 +1,19 @@
+
 import React, { useEffect, useState } from 'react'
 import { Paper, Stack, Button, Typography, Link, CircularProgress } from '@mui/material'
 import { FieldValues, useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
-//@typescript-ignore
-import * as AuthProvider from '../../store/AuthProvider'
 import { schema } from './validationSchema'
 import TextFieldController from '../../components/TextFieldComponent'
 import { theme } from '../../styles/colors'
 import { Box } from '@mui/material'
-
+import { useAuth } from '../../store/AuthProvider'
 const RegisterPageView: React.FC = () => {
-	const { register } = AuthProvider.useAuth()
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const navigate = useNavigate()
 	const [message, setMessage] = React.useState<string | null>(null)
+	const {register} = useAuth();
 	const {
 		control,
 		handleSubmit,
