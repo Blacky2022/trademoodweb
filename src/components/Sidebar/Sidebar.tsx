@@ -1,6 +1,11 @@
 import React from 'react'
 import { List, ListItemIcon, ListItemText, Divider, Paper, Button, ListItemButton } from '@mui/material'
 import { theme } from '../../styles/colors'
+import { Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import * as AuthProvider from '../../store/AuthProvider'
+import { useNavigate } from 'react-router-dom'
+
 import ProfileIcon from '@mui/icons-material/AccountCircle'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
@@ -9,10 +14,9 @@ import MarketIcon from '@mui/icons-material/Storefront'
 import TrendIcon from '@mui/icons-material/TrendingUp'
 import NotificationIcon from '@mui/icons-material/Notifications'
 import LogOutIcon from '@mui/icons-material/ExitToApp'
-import { Link } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
-import * as AuthProvider from '../../store/AuthProvider'
-import { useNavigate } from 'react-router-dom'
+import InfoIcon from '@mui/icons-material/Info';
+
+
 const styles = {
 	activeListItem: {
 		backgroundColor: theme.dark.LIGHT_HINT, // You can adjust this to your theme
@@ -66,6 +70,7 @@ const menuItems = [
 	{ text: 'Market', icon: <MarketIcon />, path: '/market' },
 	{ text: 'Trends', icon: <TrendIcon />, path: '/trends' },
 	{ text: 'Notifications', icon: <NotificationIcon />, path: '/notifications' },
+	{ text: 'About Us', icon: <InfoIcon />, path: '/about' },
 ]
 
 type SidebarProps = {

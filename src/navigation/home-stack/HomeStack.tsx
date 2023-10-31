@@ -8,6 +8,7 @@ import TrendsView from '../../views/Trends/TrendsView';
 import NotificationsView from '../../views/Notifications/NotificationsView';
 import MainLayout from '../../components/Mainlayout/MainLayout';
 import { NotFoundView } from '../../views/NotFound/NotFoundView';
+import About from '../../views/About/About';
 
 const HomeStack = () => {
   return (
@@ -18,6 +19,7 @@ const HomeStack = () => {
         <Route path='/community' element={<CommunityView />} />
         <Route path='/market' element={<MarketView />} />
         <Route path='/trends' element={<TrendsView />} />
+        <Route path='/about' element={<About />} />
         <Route path='/notifications' element={<NotificationsView />} />
         <Route path='*' element={<NotFoundView />} />
       </Routes>
