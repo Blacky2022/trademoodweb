@@ -12,7 +12,6 @@ import {
 	sendEmailVerification,
 } from 'firebase/auth'
 import { collection, doc, setDoc, updateDoc } from 'firebase/firestore'
-import { getFirestore } from 'firebase/firestore'
 import { auth, firestore } from '../config/firebase-config'
 // You might need to import a Snackbar or another notification library suitable for web apps
 
@@ -50,8 +49,7 @@ export type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [user, setUser] = useState<User | null>(null)
-	const db = getFirestore()
-
+	
 	// translations:
 	/*
   const logoutErrorTranslation = intl.formatMessage({
@@ -77,9 +75,12 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 					try {
 						const userCredential = await createUserWithEmailAndPassword(auth, email, password)
 						const user = userCredential.user
-						console.log('usercreated')
+						console.log('usercreated:', user)
 						if (user) {
 							let displayName = `${firstName.trim()} ${lastName.trim()}`
+							updateProfile(user, {
+								displayName: displayName,
+							})
 							await sendEmailVerification(user)
 							const usersCollection = collection(firestore, 'users')
 							await setDoc(doc(usersCollection, user.uid), {
@@ -94,6 +95,7 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 						throw error // Re-throw the error to be handled by the calling code
 					}
 				},
+
 				logout: async () => {
 					try {
 						await signOut(auth)
@@ -125,7 +127,7 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 						await updateEmail(user, newEmail)
 						await sendEmailVerification(user)
 
-						const userDocRef = doc(db, 'users', user.uid)
+						const userDocRef = doc(firestore, 'users', user.uid)
 						await updateDoc(userDocRef, {
 							email: newEmail,
 						})
@@ -138,7 +140,7 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 						await updateProfile(user, {
 							displayName: displayName,
 						})
-						const userDocRef = doc(db, 'users', user.uid)
+						const userDocRef = doc(firestore, 'users', user.uid)
 						await updateDoc(userDocRef, {
 							displayName: displayName,
 						})
@@ -150,7 +152,7 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 						await updateProfile(user, {
 							photoURL: imageUrl,
 						})
-						const userDocRef = doc(db, 'users', user.uid)
+						const userDocRef = doc(firestore, 'users', user.uid)
 						await updateDoc(userDocRef, {
 							photoURL: imageUrl,
 						})

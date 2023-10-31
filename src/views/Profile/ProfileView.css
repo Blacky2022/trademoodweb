@@ -1,0 +1,75 @@
+p,h2 {
+	font-size: 16px; /* Wielkość czcionki */
+	color: #333; /* Kolor tekstu */
+	line-height: 1.5; /* Odstęp między wierszami */
+	margin: 15px 0; /* Odstępy na górze i na dole */
+	padding: 0; /* Wewnętrzne odstępy */
+	font-family: 'Arial'; /* Rodzaj czcionki */
+	text-align: justify; /* Wyrównanie tekstu do lewej i prawej krawędzi */
+}
+body {
+	font-size: 0.75rem; /* Domyślnie jest to zazwyczaj 16px */
+}
+.profile-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: #1b2a33; /* Assuming this is the background color */
+	width: 80%; /* 75% z 75% */
+	padding: 37.5px 0; /* 75% z 50px */
+	margin-top: 37.5px; /* 75% z 50px */
+	margin-left: 112.5px; /* 75% z 150px */
+}
+.profile-avatar {
+	width: 250px; /* 75% z 200px */
+	height: 250px; /* 75% z 200px */
+	margin-bottom: 37.5px; /* 75% z 50px */
+	border-radius: 25%;
+	background-color: #e5e5e5; /* Dummy background color */
+}
+.paper-container {
+	display: flex;
+	justify-content: space-between;
+	width: 100%; /* Adjust this value to change the width of the overall profile sections */
+}
+.paper-container > .profile-section:last-child {
+	margin-right: 0; /* Usunięcie odstępu po prawej stronie dla ostatniej sekcji */
+}
+.profile-section {
+	background: #2c3c49;
+	color: #fff;
+	box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+	padding: 15px; /* 75% z 20px */
+	width: 22.5%; /* 75% z 30% */
+	margin-right: 15px; /* 75% z 20px */
+}
+/* Basic styling for textfields and buttons */
+.TextField,
+.Button {
+	margin: 7.5px 0;
+	width: 100%;
+}
+.profile-section h2 {
+	font-size: 18px; /* 75% z 24px */
+	margin-bottom: 15px; /* 75% z 20px */
+}
+
+.profile-section p {
+	margin-bottom: 7.5px; /* 75% z 10px */
+}
+.form-section {
+	padding: 5px;
+}
+
+.form-divider {
+	height: 1px;
+	background-color: rgba(255, 255, 255, 0.1); /* subtelny separator */
+	margin: 5px 0;
+}
+.form-divider {
+  height: 2px; /* Grubsza linia */
+  background-color: #000; /* Czarny kolor */
+  margin: 20px 0;
+  width: 100%; /* Opcjonalnie, jeśli chcesz, żeby separator był nieco węższy niż zawartość */
+  align-self: center; /* Wycentrowanie separatora w poziomie */
+}
