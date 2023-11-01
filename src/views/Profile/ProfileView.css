@@ -16,8 +16,8 @@ body {
 	align-items: center;
 	background: #1b2a33; /* Assuming this is the background color */
 	width: 80%; /* 75% z 75% */
-	padding: 37.5px 0; /* 75% z 50px */
-	margin-top: 37.5px; /* 75% z 50px */
+	padding: 15px 0; /* 75% z 50px */
+	margin-top: 20.5px; /* 75% z 50px */
 	margin-left: 112.5px; /* 75% z 150px */
 }
 .profile-avatar {
@@ -57,9 +57,7 @@ body {
 .profile-section p {
 	margin-bottom: 7.5px; /* 75% z 10px */
 }
-.form-section {
-	padding: 5px;
-}
+
 
 .form-divider {
 	height: 1px;
