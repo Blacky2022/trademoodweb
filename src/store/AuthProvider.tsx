@@ -19,7 +19,13 @@ export type AuthContextType = {
 	user: User | null
 	setUser: React.Dispatch<React.SetStateAction<User | null>>
 	login: (email: string, password: string) => Promise<void>
-	register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>
+	register: (
+		email: string,
+		password: string,
+		firstName: string,
+		lastName: string,
+		imageUrl: string | null | undefined
+	) => Promise<void>
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
 	signInAnonymously: () => Promise<void>
@@ -49,7 +55,7 @@ export type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [user, setUser] = useState<User | null>(null)
-	
+
 	// translations:
 	/*
   const logoutErrorTranslation = intl.formatMessage({
@@ -71,21 +77,36 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 					await signInWithEmailAndPassword(auth, email, password)
 					console.log('user logged')
 				},
-				register: async (email: string, password: string, firstName: string, lastName: string) => {
+				register: async (
+					email: string,
+					password: string,
+					firstName: string,
+					lastName: string,
+					imageUrl: string | null | undefined
+				) => {
 					try {
 						const userCredential = await createUserWithEmailAndPassword(auth, email, password)
 						const user = userCredential.user
 						console.log('usercreated:', user)
 						if (user) {
 							let displayName = `${firstName.trim()} ${lastName.trim()}`
-							updateProfile(user, {
-								displayName: displayName,
-							})
+							let photoURL = imageUrl || null
+							if (photoURL) {
+								updateProfile(user, {
+									displayName: displayName,
+									photoURL: photoURL,
+								})
+							} else {
+								updateProfile(user, {
+									displayName: displayName,
+								})
+							}
 							await sendEmailVerification(user)
 							const usersCollection = collection(firestore, 'users')
 							await setDoc(doc(usersCollection, user.uid), {
 								email: email,
 								displayName: displayName,
+								photoURL: photoURL,
 								followers: [],
 								following: [],
 							})

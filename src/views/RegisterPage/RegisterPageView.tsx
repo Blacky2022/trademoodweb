@@ -14,6 +14,7 @@ const RegisterPageView: React.FC = () => {
 	const navigate = useNavigate()
 	const [message, setMessage] = React.useState<string | null>(null)
 	const {register} = useAuth();
+	const imageUrl = ""
 	const {
 		control,
 		handleSubmit,
@@ -25,7 +26,7 @@ const RegisterPageView: React.FC = () => {
 	const onSubmit: SubmitHandler<FieldValues> = async ({ firstName, lastName, email, password, confirmPassword }) => {
 		setIsSubmitting(true)
 		try {
-			await register(email, password, firstName, lastName).then()
+			await register(email, password, firstName, lastName, imageUrl).then()
 			navigate('/')
 		} catch (error: any) {
 			console.log(error)
@@ -74,7 +75,7 @@ const RegisterPageView: React.FC = () => {
 		},
 		logo: {
 			marginBottom: 20,
-			maxWidth: '100%', // Ensures the logo is responsive and doesn't overflow the container
+			maxWidth: '100%',
 			height: 'auto',
 		},
 		paper: {

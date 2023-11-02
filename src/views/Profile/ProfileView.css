@@ -55,19 +55,19 @@ body {
 }
 
 .profile-section p {
-	margin-bottom: 7.5px; /* 75% z 10px */
+	margin-bottom: 7.5px; 
 }
 
 
 .form-divider {
 	height: 1px;
-	background-color: rgba(255, 255, 255, 0.1); /* subtelny separator */
+	background-color: rgba(255, 255, 255, 0.1); 
 	margin: 5px 0;
 }
 .form-divider {
-  height: 2px; /* Grubsza linia */
-  background-color: #000; /* Czarny kolor */
+  height: 2px; 
+  background-color: #000; 
   margin: 20px 0;
-  width: 100%; /* Opcjonalnie, jeśli chcesz, żeby separator był nieco węższy niż zawartość */
-  align-self: center; /* Wycentrowanie separatora w poziomie */
+  width: 100%;
+  align-self: center; 
 }
