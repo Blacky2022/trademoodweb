@@ -66,6 +66,15 @@ export default function LoginPageView() {
 			maxWidth: 400,
 			marginBottom: 20,
 		},
+		forgotPasswordLink: {
+			position: 'absolute'as 'absolute', // Absolute positioning to place it top-right
+			top: 44, // Adjust the value as needed for spacing from the top
+			right: 0, // Adjust the value as needed for spacing from the right
+			color:'inherit',
+			cursor: 'pointer',
+			fontSize: '0.6rem', // Reduced font size to make the link smaller
+        textDecoration: 'underline',
+		},
 		logo: {
 			marginBottom: 20,
 			maxWidth: '100%', // Ensures the logo is responsive and doesn't overflow the container
@@ -113,9 +122,19 @@ export default function LoginPageView() {
 						Login
 					</Typography>
 					<form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
-						<Stack spacing={2}>
+						<Stack spacing={2} position='relative'>
+							{' '}
+							{/* Add position relative to the Stack */}
 							<TextFieldController name='email' label='Email' type='email' control={control} errors={errors} />
 							<TextFieldController name='password' label='Password' type='password' control={control} errors={errors} />
+							<Link
+								style={styles.forgotPasswordLink}
+								onClick={(e: { preventDefault: () => void }) => {
+									e.preventDefault()
+									navigate('/forgotPassword')
+								}}>
+								Forgot password?
+							</Link>
 							<Button
 								type='submit'
 								variant='contained'
