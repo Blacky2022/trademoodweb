@@ -15,10 +15,44 @@ body {
 	flex-direction: column;
 	align-items: center;
 	background: #1b2a33; /* Assuming this is the background color */
-	width: 80%; /* 75% z 75% */
-	padding: 15px 0; /* 75% z 50px */
-	margin-top: 20.5px; /* 75% z 50px */
-	margin-left: 112.5px; /* 75% z 150px */
+	width: 80%; /* Adjusted to 80% as per your comment */
+	padding: 15px 0; /* Adjusted padding */
+	margin-top: 20.5px; /* Adjusted margin-top */
+	margin-left: auto; /* Centered the container */
+	margin-right: auto; /* Centered the container */
+}
+.profile-image-section {
+	position: relative;
+	width: 170px;
+	height: 170px;
+	cursor: pointer; /* Changes the cursor to the clicking hand */
+	transition: transform 0.3s ease; /* Smooth transition for the transform */
+}
+.profile-image-section:hover {
+	transform: scale(1.05); /* Slightly increase the size on hover */
+}
+
+/* Hover state for the instruction text */
+.profile-image-section:hover .update-instruction {
+	visibility: visible;
+	opacity: 1;
+}
+
+/* Initial state of the instruction text */
+.update-instruction {
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s ease;
+	position: absolute;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: rgba(0, 0, 0, 0.7);
+	color: white;
+	padding: 5px;
+	border-radius: 5px;
+	font-size: 0.8rem;
+	white-space: nowrap;
 }
 .profile-avatar {
 	width: 250px; /* 75% z 200px */

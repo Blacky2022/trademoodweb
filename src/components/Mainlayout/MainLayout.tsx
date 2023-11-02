@@ -22,9 +22,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 				<Navbar
 					currentView={currentView} // Pass currentView to Navbar
 					userName='johndoe'
-					onMenuClick={function (): void {
-						throw new Error('Function not implemented.');
-					}}
 				/>
 				<div>{children}</div>
 			</div>

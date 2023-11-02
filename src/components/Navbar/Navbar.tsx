@@ -28,10 +28,9 @@ const styles = {
 interface NavbarProps {
 	userName: string
 	currentView: string
-	onMenuClick: () => void
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentView, onMenuClick }) => {
+const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
 	
 	const { user } = useContext(AuthContext); // Destructuring to get the user object
 
@@ -48,7 +47,11 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onMenuClick }) => {
 
 				{/* User Section */}
 				<Box style={styles.userSection as React.CSSProperties}>
-					<Avatar src={'avatar.jpg'} style={styles.userAvatar as React.CSSProperties} />
+					{/* Conditional rendering based on photoURL */}
+					<Avatar 
+						src={user?.photoURL || 'avatar.jpg'} 
+						style={styles.userAvatar as React.CSSProperties} 
+					/>
 					<Typography variant='h6' style={styles.userName as React.CSSProperties}>
 						Hello, {user?.displayName}!
 					</Typography>

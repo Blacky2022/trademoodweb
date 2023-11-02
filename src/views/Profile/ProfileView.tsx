@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './ProfileView.css'
-import { Paper, Switch, FormControlLabel} from '@mui/material'
+import { Paper, Switch, FormControlLabel, Typography } from '@mui/material'
 import { theme } from '../../styles/colors'
 import UserInfo from './UserInfo/UserInfo'
 import { auth } from '../../config/firebase-config'
@@ -12,19 +12,24 @@ import ProfileImagePicker from './ProfileImageUploader/ProfileImagePicker'
 const ProfileView: React.FC = () => {
 	const [isDarkTheme, setIsDarkTheme] = useState<boolean>(true)
 	const [isPolish, setIsPolish] = useState<boolean>(true)
-	const [currentProfilePicture, setCurrentProfilePicture] = useState<string | null>(null)
 	const [imageUrl, setImageUrl] = useState<string | null>(null)
 	const userUID = auth.currentUser?.uid
 
 	return (
-		<div className='profile-container' style={{ background: theme.dark.BACKGROUND }}>
-		
-			<ProfileImagePicker
-				imageUrl={imageUrl}
-				// @ts-ignore
-				setImageUrl={setImageUrl}
-			/>
-		
+		<div className='profile-container'>
+			
+			{/* Profile Image Picker Section */}
+			<div className='profile-image-section'>
+				<ProfileImagePicker
+					imageUrl={imageUrl}
+					// @ts-ignore
+					setImageUrl={setImageUrl}
+				/>
+				{/* Instruction Text that appears on hover */}
+				<Typography variant="body2" className="update-instruction">
+					Click to update profile picture
+				</Typography>
+			</div>
 			<div className='paper-container'>
 				<Paper className='profile-section' elevation={3}>
 					<UserInfo userUID={userUID} />

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Avatar, CircularProgress } from '@mui/material'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { storage } from '../../../config/firebase-config'
-
+import { useAuth } from '../../../store/AuthProvider'
 
 interface ProfileImageUploaderProps {
 	currentPhotoUrl: string | null | undefined
@@ -11,7 +11,7 @@ interface ProfileImageUploaderProps {
 
 const ProfileImageUploader: React.FC<ProfileImageUploaderProps> = ({ currentPhotoUrl, onUploadSuccess }) => {
 	const [uploading, setUploading] = useState<boolean>(false)
-
+	const { updateProfilePicture } = useAuth()
 	const handleAvatarClick = () => {
 		document.getElementById('photo-upload-input')?.click()
 	}
@@ -25,10 +25,14 @@ const ProfileImageUploader: React.FC<ProfileImageUploaderProps> = ({ currentPhot
 				await uploadBytes(fileRef, file)
 				const photoURL = await getDownloadURL(fileRef)
 				onUploadSuccess(photoURL)
+				updateProfilePicture(photoURL)
 			} catch (error) {
 				console.error('Error uploading file:', error)
 			}
 			setUploading(false)
+			setTimeout(() => {
+				window.location.reload()
+			}, 1000)
 		}
 	}
 
