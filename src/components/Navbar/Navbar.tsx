@@ -1,36 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Avatar, Typography, AppBar, Toolbar, Box, Select, MenuItem } from '@mui/material'
-import { theme } from '../../styles/colors'
 import { AuthContext } from '../../store/AuthProvider'
 import { LanguageContext } from '../../lang/LangProvider'
 import { SelectChangeEvent } from '@mui/material/Select'
 import { FormattedMessage } from 'react-intl'
-const styles = {
-	languageSelect: {
-		color: theme.dark.HINT,
-		borderBottom: 'none',
-	},
-	navbar: {
-		backgroundColor: theme.dark.BACKGROUND,
-		color: theme.dark.TERTIARY,
-		position: 'relative',
-	},
-	userSection: {
-		display: 'flex',
-		alignItems: 'center',
-	},
-	userName: {
-		marginLeft: '10px',
-		color: theme.dark.HINT,
-	},
-	userAvatar: {
-		width: '50px',
-		height: '50px',
-	},
-	viewName: {
-		marginLeft: '20px',
-	},
-}
+import { useTheme } from '../../store/themeContext'
+import IconButton from '@mui/material/IconButton'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import { theme } from '../../styles/colors'
 
 interface NavbarProps {
 	userName: string
@@ -38,6 +16,8 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
+	const { toggleTheme, PRIMARY, SECONDARY, TERTIARY, QUATERNARY, BACKGROUND, HINT, LIGHT_HINT, NEGATIVE, POSITIVE } =
+		useTheme()
 	const { user } = useContext(AuthContext)
 	const { language, setLanguage } = useContext(LanguageContext)
 	const [lang, setLang] = useState(localStorage.getItem('appLanguage') || language)
@@ -47,6 +27,34 @@ const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
 		setLang(language)
 	}, [language])
 
+	const dynamicStyles = {
+		languageSelect: {
+			color: TERTIARY,
+			borderBottom: 'none',
+		},
+		navbar: {
+			backgroundColor: BACKGROUND,
+			color: TERTIARY,
+			position: 'relative',
+		},
+		userSection: {
+			display: 'flex',
+			alignItems: 'center',
+		},
+		userName: {
+			marginLeft: '10px',
+			color: TERTIARY,
+		},
+		userAvatar: {
+			width: '50px',
+			height: '50px',
+		},
+		viewName: {
+			marginLeft: '20px',
+			color: TERTIARY,
+		},
+	}
+
 	const handleLanguageChange = (event: SelectChangeEvent) => {
 		const selectedLang = event.target.value as string
 		setLanguage(selectedLang)
@@ -54,18 +62,21 @@ const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
 		setLang(selectedLang)
 	}
 	return (
-		<AppBar position='static' style={styles.navbar as React.CSSProperties}>
+		<AppBar position='static' style={dynamicStyles.navbar as React.CSSProperties}>
 			<Toolbar>
-				<Typography variant='h4' style={styles.viewName as React.CSSProperties}>
+				<Typography variant='h4' style={dynamicStyles.viewName as React.CSSProperties}>
 					{currentView}
 				</Typography>
 
 				<Box flexGrow={1}></Box>
+				<IconButton onClick={toggleTheme} style={{ color: PRIMARY === theme.light.PRIMARY ? 'black' : 'inherit' }}>
+					{PRIMARY === theme.light.PRIMARY ? <DarkModeIcon /> : <LightModeIcon />}
+				</IconButton>
 
 				<Select
 					value={lang}
 					onChange={handleLanguageChange}
-					style={styles.languageSelect as React.CSSProperties}
+					style={dynamicStyles.languageSelect as React.CSSProperties}
 					displayEmpty>
 					<MenuItem value='en'>
 						<FormattedMessage id='menuItems.english' defaultMessage='English' />
@@ -78,9 +89,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
 					</MenuItem>
 				</Select>
 
-				<Box style={styles.userSection as React.CSSProperties}>
-					<Avatar src={user?.photoURL || 'avatar.jpg'} style={styles.userAvatar as React.CSSProperties} />
-					<Typography variant='h6' style={styles.userName as React.CSSProperties}>
+				<Box style={dynamicStyles.userSection as React.CSSProperties}>
+					<Avatar src={user?.photoURL || 'avatar.jpg'} style={dynamicStyles.userAvatar as React.CSSProperties} />
+					<Typography variant='h6' style={dynamicStyles.userName as React.CSSProperties}>
 						<FormattedMessage id='navbar.hello' values={{ name: user?.displayName || 'Guest' }} />
 					</Typography>
 				</Box>

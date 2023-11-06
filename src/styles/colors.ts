@@ -1,6 +1,9 @@
-export const theme = {
+import { ThemeContextType } from "../store/themeContext";
+
+export type ThemeName = 'light' | 'dark';
+
+export const theme: { [key in ThemeName]: ThemeContextType } = {
   light: {
-    theme: 'light',
     PRIMARY: '#BFE3CC',
     SECONDARY: '#BBDDE1',
     TERTIARY: '#030318',
@@ -12,7 +15,6 @@ export const theme = {
     POSITIVE: '#90D37A',
   },
   dark: {
-    theme: 'dark',
     PRIMARY: '#2E5C6A',
     SECONDARY: '#9FB2C3',
     TERTIARY: '#FAFAFA',

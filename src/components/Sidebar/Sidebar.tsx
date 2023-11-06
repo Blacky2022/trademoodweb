@@ -1,6 +1,5 @@
 import React from 'react'
 import { List, ListItemIcon, ListItemText, Divider, Paper, Button, ListItemButton } from '@mui/material'
-import { theme } from '../../styles/colors'
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import * as AuthProvider from '../../store/AuthProvider'
@@ -12,55 +11,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import CommunityIcon from '@mui/icons-material/Group'
 import MarketIcon from '@mui/icons-material/Storefront'
 import TrendIcon from '@mui/icons-material/TrendingUp'
-import NotificationIcon from '@mui/icons-material/Notifications'
 import LogOutIcon from '@mui/icons-material/ExitToApp'
 import InfoIcon from '@mui/icons-material/Info'
-
-const styles = {
-	activeListItem: {
-		backgroundColor: theme.dark.LIGHT_HINT, 
-	},
-	listItemButton: {
-		width: '100%',
-		justifyContent: 'flex-start',
-		'&:hover': {
-			backgroundColor: theme.dark.LIGHT_HINT,
-		},
-	} as React.CSSProperties,
-	sidebar: {
-		height: '100vh',
-		width: '250px',
-		backgroundColor: theme.dark.BACKGROUND,
-		color: theme.dark.TERTIARY,
-		display: 'flex',
-		flexDirection: 'column' as 'column',
-		justifyContent: 'space-between',
-	},
-	listItem: {
-		'&:hover': {
-			backgroundColor: theme.dark.LIGHT_HINT, 
-		},
-	},
-	logoutButton: {
-		alignSelf: 'center',
-		marginBottom: 10,
-		color: theme.dark.TERTIARY, 
-		borderColor: theme.dark.TERTIARY, 
-	},
-	logoContainer: {
-		display: 'flex',
-		alignItems: 'center',
-		marginBottom: '20px',
-	},
-	logo: {
-		width: '80px', 
-		height: '80px',
-		marginRight: '15px',
-	},
-	appName: {
-		fontSize: '20px', 
-	},
-}
+import { useTheme } from '../../store/themeContext'
 
 const menuItems = [
 	{ id: 'sidebar.profile', text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
@@ -76,6 +29,7 @@ type SidebarProps = {
 	onMenuClick?: (view: string) => void
 }
 const Sidebar: React.FC<SidebarProps> = ({ currentView, onMenuClick }) => {
+	const { TERTIARY, BACKGROUND, LIGHT_HINT } = useTheme()
 	const { logout } = AuthProvider.useAuth()
 	const location = useLocation()
 	const navigate = useNavigate()
@@ -92,6 +46,61 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onMenuClick }) => {
 			onMenuClick(view)
 		}
 	}
+	const styles = {
+		activeListItem: {
+			backgroundColor: LIGHT_HINT,
+			color: TERTIARY,
+		},
+		listItemButton: {
+			width: '100%',
+			justifyContent: 'flex-start',
+			'&:hover': {
+				backgroundColor: LIGHT_HINT,
+			},
+		} as React.CSSProperties,
+		sidebar: {
+			position: 'fixed' as 'fixed', // Type assertion here
+			top: 0,
+			left: 0,
+			height: '100%',
+			width: '250px',
+			backgroundColor: BACKGROUND,
+			color: TERTIARY,
+			display: 'flex' as 'flex', // Type assertion here
+			flexDirection: 'column' as 'column', // Type assertion here
+			justifyContent: 'space-between' as 'space-between', // Type assertion here
+			zIndex: 1000, // zIndex is fine as a number
+		},
+
+		listItem: {
+			'&:hover': {
+				backgroundColor: LIGHT_HINT,
+				color: TERTIARY,
+			},
+		},
+		ListItemText: { color: TERTIARY },
+		logoutButton: {
+			alignSelf: 'center',
+			marginBottom: 10,
+			color: TERTIARY,
+			borderColor: TERTIARY,
+		},
+		logoContainer: {
+			display: 'flex',
+			alignItems: 'center',
+			marginBottom: '20px',
+		},
+		logo: {
+			width: '80px',
+			height: '80px',
+			marginRight: '15px',
+		},
+		appName: {
+			fontSize: '20px',
+			color: TERTIARY,
+		},
+	}
+
 	return (
 		<Paper style={styles.sidebar} elevation={3}>
 			<div style={styles.logoContainer}>
@@ -105,11 +114,19 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onMenuClick }) => {
 							<ListItemButton
 								onClick={() => handleClick(item.text)}
 								sx={
-									location.pathname === item.path ? { ...styles.listItem, ...styles.activeListItem } : styles.listItem
+									location.pathname === item.path
+										? {
+												...styles.listItem,
+												...styles.activeListItem,
+												'& .MuiListItemText-primary': { color: styles.activeListItem.color },
+										  }
+										: {
+												...styles.listItem,
+												'& .MuiListItemText-primary': { color: TERTIARY },
+										  }
 								}>
-								<ListItemIcon>{React.cloneElement(item.icon, { style: { color: theme.dark.TERTIARY } })}</ListItemIcon>
+								<ListItemIcon>{React.cloneElement(item.icon, { style: { color: TERTIARY } })}</ListItemIcon>
 								<ListItemText primary={<FormattedMessage id={item.id} defaultMessage={item.text} />} />
-
 								{location.pathname === item.path && <ArrowForwardIosIcon />}
 							</ListItemButton>
 						</Link>

@@ -4,13 +4,12 @@ import Sidebar from '../Sidebar/Sidebar';
 
 interface MainLayoutProps {
 	children?: React.ReactNode;
-	// other props if needed
+
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 	const location = useLocation();
 
-	// Convert path to view name for display. e.g. '/dashboard' becomes 'Dashboard'
 	const currentView = location.pathname.slice(1).charAt(0).toUpperCase() + location.pathname.slice(2);
 
 	return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './ProfileView.css'
 import { Paper, Typography } from '@mui/material'
 import UserInfo from './UserInfo/UserInfo'
@@ -8,12 +8,24 @@ import EditPersonalInfo from './edit-personal-info/EditPersonalInfo'
 import EditPassword from './edit-password/EditPassword'
 import ProfileImagePicker from './ProfileImageUploader/ProfileImagePicker'
 import { FormattedMessage } from 'react-intl'
+import { useTheme } from '../../store/themeContext'
 const ProfileView: React.FC = () => {
 	const [imageUrl, setImageUrl] = useState<string | null>(null)
 	const userUID = auth.currentUser?.uid
+	const { PRIMARY, SECONDARY, TERTIARY, QUATERNARY, BACKGROUND, HINT, LIGHT_HINT, NEGATIVE, POSITIVE } = useTheme()
 
+	const style = {
+		'--background-color': BACKGROUND,
+		'--secondary-color': SECONDARY,
+		'--text-color': TERTIARY,
+		'--tertiary-color': TERTIARY,
+		'--paper-bg-color': SECONDARY,
+		'--divider-color': LIGHT_HINT,
+		'--negative-color': NEGATIVE,
+		'--positive-color': POSITIVE,
+	} as React.CSSProperties
 	return (
-		<div className='profile-container'>
+		<div className='profile-container' style={style}>
 			<div className='profile-image-section'>
 				<ProfileImagePicker
 					imageUrl={imageUrl}

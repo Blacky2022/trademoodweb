@@ -5,7 +5,7 @@ import { useAuth } from '../../../store/AuthProvider'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './validationSchema'
-import { useIntl, FormattedMessage } from 'react-intl'
+import { useIntl} from 'react-intl'
 
 const EditEmail = () => {
 	const { updateEmail } = useAuth()
@@ -80,7 +80,6 @@ const EditEmail = () => {
 					{isLoading ? formatMessage({ id: 'editEmail.updating' }) : formatMessage({ id: 'editEmail.updateButton' })}
 				</Button>
 			</form>
-			{errors.newEmail && <span>{errors.newEmail.message}</span>}
 		</div>
 	)
 }

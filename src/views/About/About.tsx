@@ -1,16 +1,24 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './AboutUs.css'
 import { FormattedMessage } from 'react-intl'
 import AssessmentIcon from '@mui/icons-material/Assessment'
 import FeaturesIcon from '@mui/icons-material/Extension'
 import DecisionIcon from '@mui/icons-material/ThumbUp'
+import { useTheme } from '../../store/themeContext'
 
 const About = () => {
+	const { PRIMARY, SECONDARY, TERTIARY, QUATERNARY, BACKGROUND, HINT, LIGHT_HINT, NEGATIVE, POSITIVE } = useTheme()
+	// Set CSS variables based on the theme
+	const style = {
+		'--background-color': BACKGROUND,
+		'--text-color': TERTIARY,
+		'--icon-color': TERTIARY,
+	} as React.CSSProperties
 	return (
-		<div className='container'>
+		<div className='container' style={style}>
 			<div className='content'>
 				<div className='column'>
-					<AssessmentIcon style={{ fontSize: 40, color: 'white' }} />
+					<AssessmentIcon style={{ fontSize: 40, color: TERTIARY }} />
 					<h2 className='subtitle'>
 						<FormattedMessage id='about.keyObjectivesTitle' defaultMessage='Key Objectives of the Application:' />
 					</h2>
@@ -22,7 +30,7 @@ const About = () => {
 					</p>
 				</div>
 				<div className='column'>
-					<FeaturesIcon style={{ fontSize: 40, color: 'white' }} />
+					<FeaturesIcon style={{ fontSize: 40, color: TERTIARY }} />
 					<h2 className='subtitle'>
 						<FormattedMessage id='about.featuresTitle' defaultMessage='Application Features:' />
 					</h2>
@@ -34,7 +42,7 @@ const About = () => {
 					</p>
 				</div>
 				<div className='column'>
-					<DecisionIcon style={{ fontSize: 40, color: 'white' }} />
+					<DecisionIcon style={{ fontSize: 40, color: TERTIARY }} />
 					<h2 className='subtitle'>
 						<FormattedMessage id='about.smartDecisionsTitle' defaultMessage='Stay Informed and Make Smart Decisions:' />
 					</h2>
