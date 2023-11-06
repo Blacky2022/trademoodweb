@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import * as AuthProvider from '../../store/AuthProvider'
 import { useNavigate } from 'react-router-dom'
-
+import { FormattedMessage } from 'react-intl'
 import ProfileIcon from '@mui/icons-material/AccountCircle'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
@@ -14,12 +14,11 @@ import MarketIcon from '@mui/icons-material/Storefront'
 import TrendIcon from '@mui/icons-material/TrendingUp'
 import NotificationIcon from '@mui/icons-material/Notifications'
 import LogOutIcon from '@mui/icons-material/ExitToApp'
-import InfoIcon from '@mui/icons-material/Info';
-
+import InfoIcon from '@mui/icons-material/Info'
 
 const styles = {
 	activeListItem: {
-		backgroundColor: theme.dark.LIGHT_HINT, // You can adjust this to your theme
+		backgroundColor: theme.dark.LIGHT_HINT, 
 	},
 	listItemButton: {
 		width: '100%',
@@ -34,19 +33,19 @@ const styles = {
 		backgroundColor: theme.dark.BACKGROUND,
 		color: theme.dark.TERTIARY,
 		display: 'flex',
-		flexDirection: 'column' as 'column', // Explicitly set the type to 'column'
+		flexDirection: 'column' as 'column',
 		justifyContent: 'space-between',
 	},
 	listItem: {
 		'&:hover': {
-			backgroundColor: theme.dark.LIGHT_HINT, // Use provided hover color
+			backgroundColor: theme.dark.LIGHT_HINT, 
 		},
 	},
 	logoutButton: {
 		alignSelf: 'center',
 		marginBottom: 10,
-		color: theme.dark.TERTIARY, // Use the provided text color for the button
-		borderColor: theme.dark.TERTIARY, // Use the provided text color for the button border
+		color: theme.dark.TERTIARY, 
+		borderColor: theme.dark.TERTIARY, 
 	},
 	logoContainer: {
 		display: 'flex',
@@ -54,23 +53,22 @@ const styles = {
 		marginBottom: '20px',
 	},
 	logo: {
-		width: '80px', // adjust according to your logo size
+		width: '80px', 
 		height: '80px',
 		marginRight: '15px',
 	},
 	appName: {
-		fontSize: '20px', // adjust according to your preference
+		fontSize: '20px', 
 	},
 }
 
 const menuItems = [
-	{ text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
-	{ text: 'Dashboard', icon: <DashboardIcon />, path: '/', hasArrow: true },
-	{ text: 'Community', icon: <CommunityIcon />, path: '/community' },
-	{ text: 'Market', icon: <MarketIcon />, path: '/market' },
-	{ text: 'Trends', icon: <TrendIcon />, path: '/trends' },
-	{ text: 'Notifications', icon: <NotificationIcon />, path: '/notifications' },
-	{ text: 'About Us', icon: <InfoIcon />, path: '/about' },
+	{ id: 'sidebar.profile', text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
+	{ id: 'sidebar.dashboard', text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard', hasArrow: true },
+	{ id: 'sidebar.community', text: 'Community', icon: <CommunityIcon />, path: '/community' },
+	{ id: 'sidebar.market', text: 'Market', icon: <MarketIcon />, path: '/market' },
+	{ id: 'sidebar.trends', text: 'Trends', icon: <TrendIcon />, path: '/trends' },
+	{ id: 'sidebar.about', text: 'About Us', icon: <InfoIcon />, path: '/about' },
 ]
 
 type SidebarProps = {
@@ -81,15 +79,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onMenuClick }) => {
 	const { logout } = AuthProvider.useAuth()
 	const location = useLocation()
 	const navigate = useNavigate()
-const handleLogout = async () => {
-	try {
-		await logout();
-		navigate('/')
-	} catch (error) {
-		console.error('Logout failed', error);
-		// Optionally, show an error message to the user
+	const handleLogout = async () => {
+		try {
+			await logout()
+			navigate('/')
+		} catch (error) {
+			console.error('Logout failed', error)
+		}
 	}
-}
 	const handleClick = (view: string) => {
 		if (onMenuClick) {
 			onMenuClick(view)
@@ -111,7 +108,8 @@ const handleLogout = async () => {
 									location.pathname === item.path ? { ...styles.listItem, ...styles.activeListItem } : styles.listItem
 								}>
 								<ListItemIcon>{React.cloneElement(item.icon, { style: { color: theme.dark.TERTIARY } })}</ListItemIcon>
-								<ListItemText primary={item.text} />
+								<ListItemText primary={<FormattedMessage id={item.id} defaultMessage={item.text} />} />
+
 								{location.pathname === item.path && <ArrowForwardIosIcon />}
 							</ListItemButton>
 						</Link>
@@ -124,9 +122,8 @@ const handleLogout = async () => {
 				color='inherit'
 				startIcon={<LogOutIcon />}
 				style={styles.logoutButton}
-				onClick={handleLogout}
-			>
-				LogOut
+				onClick={handleLogout}>
+				<FormattedMessage id='sidebar.logout' defaultMessage='Log Out' />
 			</Button>
 		</Paper>
 	)

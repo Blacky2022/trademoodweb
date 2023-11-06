@@ -1,6 +1,7 @@
-import React, { useLayoutEffect, useState, useEffect } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { firestore } from '../../../config/firebase-config'
 import { doc, getDoc } from 'firebase/firestore'
+import { useIntl } from 'react-intl'
 
 type UserInfoProps = {
 	userUID?: string
@@ -11,6 +12,7 @@ export default function UserInfo({ userUID }: UserInfoProps) {
 	const [email, setEmail] = useState<string | undefined>()
 	const [firstName, setFirstName] = useState<string | undefined>()
 	const [lastName, setLastName] = useState<string | undefined>()
+	const { formatMessage } = useIntl()
 
 	useLayoutEffect(() => {
 		async function getUserDetails() {
@@ -23,18 +25,18 @@ export default function UserInfo({ userUID }: UserInfoProps) {
 						setDisplayName(userData?.displayName)
 						setEmail(userData?.email)
 					} else {
-						console.error('User not found')
+						console.error(formatMessage({ id: 'userInfo.error.userNotFound' }))
 					}
 				} catch (error) {
-					console.error('Error fetching user details:', error)
+					console.error(formatMessage({ id: 'userInfo.error.fetchError' }), error)
 				}
 			}
 		}
 
 		getUserDetails()
-	}, [userUID])
+	}, [userUID, formatMessage])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (displayName) {
 			const nameParts = displayName.split(' ')
 			if (nameParts.length === 2) {
@@ -46,10 +48,16 @@ export default function UserInfo({ userUID }: UserInfoProps) {
 
 	return (
 		<div>
-			<h2>Current profile info</h2>
-			<p>Email: {email}</p>
-			<p>First Name: {firstName}</p>
-			<p>Last Name: {lastName}</p>
+			<h2>{formatMessage({ id: 'userInfo.title' })}</h2>
+			<p>
+				{formatMessage({ id: 'userInfo.email' })}: {email}
+			</p>
+			<p>
+				{formatMessage({ id: 'userInfo.firstName' })}: {firstName}
+			</p>
+			<p>
+				{formatMessage({ id: 'userInfo.lastName' })}: {lastName}
+			</p>
 		</div>
 	)
 }

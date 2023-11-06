@@ -1,8 +1,15 @@
-import React, { useContext } from 'react'
-import { Avatar, Typography, AppBar, Toolbar, Box } from '@mui/material'
+import React, { useContext, useEffect, useState } from 'react'
+import { Avatar, Typography, AppBar, Toolbar, Box, Select, MenuItem } from '@mui/material'
 import { theme } from '../../styles/colors'
 import { AuthContext } from '../../store/AuthProvider'
+import { LanguageContext } from '../../lang/LangProvider'
+import { SelectChangeEvent } from '@mui/material/Select'
+import { FormattedMessage } from 'react-intl'
 const styles = {
+	languageSelect: {
+		color: theme.dark.HINT,
+		borderBottom: 'none',
+	},
 	navbar: {
 		backgroundColor: theme.dark.BACKGROUND,
 		color: theme.dark.TERTIARY,
@@ -31,29 +38,50 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
-	
-	const { user } = useContext(AuthContext); // Destructuring to get the user object
+	const { user } = useContext(AuthContext)
+	const { language, setLanguage } = useContext(LanguageContext)
+	const [lang, setLang] = useState(localStorage.getItem('appLanguage') || language)
 
+	useEffect(() => {
+		localStorage.setItem('appLanguage', language)
+		setLang(language)
+	}, [language])
+
+	const handleLanguageChange = (event: SelectChangeEvent) => {
+		const selectedLang = event.target.value as string
+		setLanguage(selectedLang)
+		localStorage.setItem('appLanguage', selectedLang)
+		setLang(selectedLang)
+	}
 	return (
 		<AppBar position='static' style={styles.navbar as React.CSSProperties}>
 			<Toolbar>
-				{/* View Name */}
 				<Typography variant='h4' style={styles.viewName as React.CSSProperties}>
 					{currentView}
 				</Typography>
 
-				{/* Spacer to push content to the edges */}
 				<Box flexGrow={1}></Box>
 
-				{/* User Section */}
+				<Select
+					value={lang}
+					onChange={handleLanguageChange}
+					style={styles.languageSelect as React.CSSProperties}
+					displayEmpty>
+					<MenuItem value='en'>
+						<FormattedMessage id='menuItems.english' defaultMessage='English' />
+					</MenuItem>
+					<MenuItem value='pl'>
+						<FormattedMessage id='menuItems.polish' defaultMessage='Polish' />
+					</MenuItem>
+					<MenuItem value='cn'>
+						<FormattedMessage id='menuItems.Chinese' defaultMessage='Chinese' />
+					</MenuItem>
+				</Select>
+
 				<Box style={styles.userSection as React.CSSProperties}>
-					{/* Conditional rendering based on photoURL */}
-					<Avatar 
-						src={user?.photoURL || 'avatar.jpg'} 
-						style={styles.userAvatar as React.CSSProperties} 
-					/>
+					<Avatar src={user?.photoURL || 'avatar.jpg'} style={styles.userAvatar as React.CSSProperties} />
 					<Typography variant='h6' style={styles.userName as React.CSSProperties}>
-						Hello, {user?.displayName}!
+						<FormattedMessage id='navbar.hello' values={{ name: user?.displayName || 'Guest' }} />
 					</Typography>
 				</Box>
 			</Toolbar>

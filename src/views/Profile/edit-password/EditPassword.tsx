@@ -5,10 +5,12 @@ import { useAuth } from '../../../store/AuthProvider'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './validationSchema'
-
+import { useIntl, FormattedMessage } from 'react-intl'
 const EditPassword = () => {
 	const [loading, setLoading] = useState(false)
 	const { updatePassword } = useAuth()
+	const { formatMessage } = useIntl()
+	const intl = useIntl()
 	const {
 		control,
 		handleSubmit,
@@ -19,29 +21,31 @@ const EditPassword = () => {
 	})
 
 	const onSubmit: SubmitHandler<{ newPassword: string; confirmNewPassword: string }> = async data => {
-		setLoading(true)
+		setLoading(true);
 		try {
-			await updatePassword(data.newPassword).then(() => {
-				alert('Password updated successfully!')
-				window.location.reload()
-			})
+		  await updatePassword(data.newPassword).then(() => {
+			alert(intl.formatMessage({ id: 'editPassword.success' })); // Use formatMessage here
+			window.location.reload();
+		  });
 		} catch (error: any) {
-			console.log(error)
-			if (error.code === 'auth/weak-password') {
-				setError('newPassword', { message: 'Password is too weak' })
-			} else if (error.code === 'auth/requires-recent-login') {
-				setError('newPassword', { message: "This operation requires re-authentication to ensure it's you" })
-			} else {
-				setError('newPassword', { message: 'Internal error, please try again later' })
-			}
+		  console.log(error);
+		  const errorMessageId = error.code === 'auth/weak-password'
+			? 'editPassword.errors.weakPassword'
+			: error.code === 'auth/requires-recent-login'
+			? 'editPassword.errors.recentLoginRequired'
+			: 'editPassword.errors.internalError';
+	
+		  setError('newPassword', { 
+			message: intl.formatMessage({ id: errorMessageId }) 
+		  });
 		} finally {
-			setLoading(false)
+		  setLoading(false);
 		}
-	}
+	  };
 
 	return (
 		<div className='form-section'>
-			<h2>Update Password</h2>
+			<h2>{formatMessage({ id: 'editPassword.title' })}</h2>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Controller
 					name='newPassword'
@@ -50,7 +54,7 @@ const EditPassword = () => {
 					render={({ field }) => (
 						<TextField
 							{...field}
-							label='New Password'
+							label={formatMessage({ id: 'editPassword.newPasswordLabel' })}
 							type='password'
 							fullWidth
 							error={!!errors.newPassword}
@@ -65,7 +69,7 @@ const EditPassword = () => {
 					render={({ field }) => (
 						<TextField
 							{...field}
-							label='Confirm New Password'
+							label={formatMessage({ id: 'editPassword.confirmNewPasswordLabel' })}
 							type='password'
 							fullWidth
 							error={!!errors.confirmNewPassword}
@@ -80,7 +84,7 @@ const EditPassword = () => {
 					type='submit'
 					fullWidth
 					disabled={loading}>
-					Update Password
+					{formatMessage({ id: 'editPassword.updateButton' })}
 				</Button>
 			</form>
 		</div>

@@ -29,7 +29,7 @@ export default function LoginPageView() {
 		try {
 			await login(email, password)
 			setMessage('User logged in successfully!')
-			navigate('/')
+			navigate('/dashboard')
 		} catch (error: any) {
 			if (error.code === 'auth/user-not-found') {
 				setError('email', { message: 'User not found' })
