@@ -1,0 +1,31 @@
+.trends-view {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .search-list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .instrument-list {
+    overflow-y: auto;
+    max-height: 400px; /* Adjust based on your layout */
+  }
+  
+  .instrument {
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .instrument.selected {
+    background-color: lightblue; /* Highlight the selected instrument */
+  }
+  
+  .instrument-details {
+    padding: 0.5rem;
+    border-left: 1px solid #ccc; /* A border to separate from the list */
+  }
+  

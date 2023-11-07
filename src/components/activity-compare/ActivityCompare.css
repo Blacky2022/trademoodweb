@@ -1,0 +1,33 @@
+.container {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 8px; /* Replace with actual value from constants */
+    display: flex;
+    flex-direction: column;
+    padding: 12px; /* Replace with actual value from spacing */
+    gap: 12px; /* Replace with actual value from spacing */
+    align-items: center;
+}
+
+.text {
+    font-size: 20px; /* Replace with actual value from typography */
+    text-align: center;
+}
+
+.arrowContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.activityContainer {
+    display: flex;
+    gap: 12px; /* Replace with actual value from spacing */
+    justify-content: center;
+    align-items: center;
+}
+
+.activityText {
+    font-weight: bold; /* Replace with actual value from typography */
+    font-size: 20px; /* Replace with actual value from typography */
+}

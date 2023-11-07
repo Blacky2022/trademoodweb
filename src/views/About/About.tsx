@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import './AboutUs.css'
 import { FormattedMessage } from 'react-intl'
 import AssessmentIcon from '@mui/icons-material/Assessment'
@@ -7,8 +7,7 @@ import DecisionIcon from '@mui/icons-material/ThumbUp'
 import { useTheme } from '../../store/themeContext'
 
 const About = () => {
-	const { PRIMARY, SECONDARY, TERTIARY, QUATERNARY, BACKGROUND, HINT, LIGHT_HINT, NEGATIVE, POSITIVE } = useTheme()
-	// Set CSS variables based on the theme
+	const { TERTIARY, BACKGROUND} = useTheme()
 	const style = {
 		'--background-color': BACKGROUND,
 		'--text-color': TERTIARY,
