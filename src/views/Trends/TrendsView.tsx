@@ -7,8 +7,8 @@ import { useTheme } from '../../store/themeContext' // Importing useTheme
 import InstrumentDetails from './InstrumentDetails/InstrumentDetails'
 
 const TrendsView = () => {
-	const { toggleTheme, PRIMARY, SECONDARY, TERTIARY, QUATERNARY, BACKGROUND, HINT, LIGHT_HINT, NEGATIVE, POSITIVE } =
-		useTheme() // Using useTheme to get the colors
+	const { TERTIARY, BACKGROUND, HINT, LIGHT_HINT} =
+		useTheme() 
 
 	const instruments = useInstrument()
 	const [search, setSearch] = useState('')

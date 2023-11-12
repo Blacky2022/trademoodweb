@@ -31,7 +31,7 @@ const CustomChart: React.FC<CustomChartProps> = ({ selectedInstrument }) => {
 	const [data, setData] = useState<StockData[]>()
 	const theme = useTheme()
 	const intl = useIntl()
-
+	const functionUrl = process.env.REACT_APP_CLOUD_FUNCTION_URL
 	const chartWidth = 1000
 	const chartHeight = 350
 
@@ -104,7 +104,7 @@ const CustomChart: React.FC<CustomChartProps> = ({ selectedInstrument }) => {
 		setChartDataError(false)
 		const { currentTimestamp, timestamp, interval } = selectDateForChart(selected)
 
-		const functionUrl = `https://us-central1-trademood-935a3.cloudfunctions.net/proxyFinanceData`
+		
 
 		try {
 			const queryParams = new URLSearchParams({
