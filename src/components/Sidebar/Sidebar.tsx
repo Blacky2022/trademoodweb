@@ -9,18 +9,16 @@ import ProfileIcon from '@mui/icons-material/AccountCircle'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import CommunityIcon from '@mui/icons-material/Group'
-import MarketIcon from '@mui/icons-material/Storefront'
 import TrendIcon from '@mui/icons-material/TrendingUp'
 import LogOutIcon from '@mui/icons-material/ExitToApp'
 import InfoIcon from '@mui/icons-material/Info'
 import { useTheme } from '../../store/themeContext'
 
 const menuItems = [
-	{ id: 'sidebar.profile', text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
-	{ id: 'sidebar.dashboard', text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard', hasArrow: true },
-	{ id: 'sidebar.community', text: 'Community', icon: <CommunityIcon />, path: '/community' },
-	{ id: 'sidebar.market', text: 'Market', icon: <MarketIcon />, path: '/market' },
+	{ id: 'sidebar.dashboard', text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
 	{ id: 'sidebar.trends', text: 'Trends', icon: <TrendIcon />, path: '/trends' },
+	{ id: 'sidebar.community', text: 'Community', icon: <CommunityIcon />, path: '/community' },
+	{ id: 'sidebar.profile', text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
 	{ id: 'sidebar.about', text: 'About Us', icon: <InfoIcon />, path: '/about' },
 ]
 

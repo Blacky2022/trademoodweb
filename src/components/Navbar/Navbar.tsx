@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Avatar, Typography, AppBar, Toolbar, Box, Select, MenuItem } from '@mui/material'
-import { AuthContext } from '../../store/AuthProvider'
-import { LanguageContext } from '../../lang/LangProvider'
-import { SelectChangeEvent } from '@mui/material/Select'
-import { FormattedMessage } from 'react-intl'
-import { useTheme } from '../../store/themeContext'
-import IconButton from '@mui/material/IconButton'
-import LightModeIcon from '@mui/icons-material/LightMode'
-import DarkModeIcon from '@mui/icons-material/DarkMode'
+import React, { useContext, useEffect, useState } from 'react';
+import { Avatar, Typography, AppBar, Toolbar, Box, Select, MenuItem } from '@mui/material';
+import { AuthContext } from '../../store/AuthProvider';
+import { LanguageContext } from '../../lang/LangProvider';
+import { SelectChangeEvent } from '@mui/material/Select';
+import { FormattedMessage } from 'react-intl';
+import { useTheme } from '../../store/themeContext';
+import IconButton from '@mui/material/IconButton';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { theme } from '../../styles/colors'
 
 interface NavbarProps {
@@ -62,7 +62,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
 		setLang(selectedLang)
 	}
 	return (
-		<AppBar position='static' style={dynamicStyles.navbar as React.CSSProperties}>
+		<AppBar position='fixed' style={dynamicStyles.navbar as React.CSSProperties}>
 			<Toolbar>
 				<Typography variant='h4' style={dynamicStyles.viewName as React.CSSProperties}>
 					{currentView}
