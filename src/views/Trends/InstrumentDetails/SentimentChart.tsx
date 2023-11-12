@@ -26,7 +26,6 @@ const SentimentChart = ({ selectedInstrument }: { selectedInstrument: Instrument
 				backgroundColor: [POSITIVE, HINT, NEGATIVE],
 				hoverOffset: 4,
 				borderWidth: 0,
-				s,
 			},
 		],
 	}
