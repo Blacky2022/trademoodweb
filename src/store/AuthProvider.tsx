@@ -13,7 +13,6 @@ import {
 } from 'firebase/auth'
 import { collection, doc, setDoc, updateDoc } from 'firebase/firestore'
 import { auth, firestore } from '../config/firebase-config'
-// You might need to import a Snackbar or another notification library suitable for web apps
 
 export type AuthContextType = {
 	user: User | null
@@ -33,6 +32,7 @@ export type AuthContextType = {
 	updatePersonalData: (firstName: string, lastName: string) => Promise<void>
 	updateProfilePicture: (imageUrl: string | null | undefined) => Promise<void>
 	updatePassword: (newPassword: string) => Promise<void>
+	updateAboutMe: (newAboutMe: string) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -47,6 +47,7 @@ export const AuthContext = createContext<AuthContextType>({
 	updatePersonalData: async () => {},
 	updateProfilePicture: async () => {},
 	updatePassword: async () => {},
+	updateAboutMe: async () => {},
 })
 
 export type AuthProviderProps = {
@@ -56,18 +57,6 @@ export type AuthProviderProps = {
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [user, setUser] = useState<User | null>(null)
 
-	// translations:
-	/*
-  const logoutErrorTranslation = intl.formatMessage({
-    id: "views.home.profile.provider.error.logout",
-    defaultMessage: "Error occurred while logging out"
-});
-const singInAnonymouslyErrorTranslation = intl.formatMessage({
-    id: "views.home.profile.provider.error.sign-in-anonymously",
-    defaultMessage: "Error occurred while logging in"
-});
-
-*/
 	return (
 		<AuthContext.Provider
 			value={{
@@ -82,12 +71,12 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 					password: string,
 					firstName: string,
 					lastName: string,
-					imageUrl: string | null | undefined
+					imageUrl: string | null | undefined,
+					aboutMe?: string
 				) => {
 					try {
 						const userCredential = await createUserWithEmailAndPassword(auth, email, password)
 						const user = userCredential.user
-						console.log('usercreated:', user)
 						if (user) {
 							let displayName = `${firstName.trim()} ${lastName.trim()}`
 							let photoURL = imageUrl || null
@@ -107,13 +96,14 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 								email: email,
 								displayName: displayName,
 								photoURL: photoURL,
+								aboutMe: '',
 								followers: [],
 								following: [],
 							})
 						}
 					} catch (error) {
 						console.error('Registration error:', error)
-						throw error // Re-throw the error to be handled by the calling code
+						throw error
 					}
 				},
 
@@ -122,10 +112,6 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 						await signOut(auth)
 					} catch (error) {
 						console.log(error)
-						// Snackbar.show({
-						//    text: logoutErrorTranslation,
-						//    duration: Snackbar.LENGTH_SHORT
-						// });
 					}
 				},
 				resetPassword: async (email: string) => {
@@ -136,10 +122,6 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 						await signInAnonymously(auth)
 					} catch (error) {
 						console.log(error)
-						// Snackbar.show({
-						//    text: singInAnonymouslyErrorTranslation,
-						//    duration: Snackbar.LENGTH_SHORT
-						// });
 					}
 				},
 				updateEmail: async (newEmail: string) => {
@@ -183,6 +165,15 @@ const singInAnonymouslyErrorTranslation = intl.formatMessage({
 					const user = auth.currentUser
 					if (user) {
 						await updatePassword(user, newPassword)
+					}
+				},
+				updateAboutMe: async (aboutMe: string | null) => {
+					const user = auth.currentUser
+					if (user) {
+						const userDocRef = doc(firestore, 'users', user.uid)
+						await updateDoc(userDocRef, {
+							aboutMe: aboutMe,
+						})
 					}
 				},
 			}}>
