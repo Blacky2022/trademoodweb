@@ -1,20 +1,10 @@
-/* Default styles for all themes */
-div{
-  color:#fafafa;
-  font-size: 32px;
-}
+
 body {
   font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
 }
 
-button {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-}
 
 /* Dark Theme (Default) */
 :root {
@@ -29,5 +19,5 @@ button {
   --positive-color: #5AD37A;
 
   background-color: var(--background-color);
-  color: var(--tertiary-color);
+
 }
