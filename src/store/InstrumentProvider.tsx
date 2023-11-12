@@ -75,7 +75,10 @@ export function InstrumentProvider({ children }: InstrumentProviderProps) {
 					photoUrl,
 				}
 
-				list.push(instrument)
+				const existingInstrument = list.find(item => item.crypto === instrument.crypto)
+				if (!existingInstrument) {
+					list.push(instrument)
+				}
 			})
 
 			setInstruments(list)
@@ -96,4 +99,21 @@ export function useInstrument() {
 	}
 
 	return instruments
+}
+export function getMaxSentimentPositive(data: InstrumentProps[] | undefined): InstrumentProps | undefined {
+    if (data) {
+
+        if (data.length === 0) {
+            return undefined;
+        }
+
+        let maxSentimentPositive = data[0];
+        for (let i = 1; i < data.length; i++) {
+            if (data[i].sentimentPositive > maxSentimentPositive.sentimentPositive) {
+                maxSentimentPositive = data[i];
+            }
+        }
+
+        return maxSentimentPositive;
+    }
 }
