@@ -1,83 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom'; 
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { InstrumentProps } from 'store/InstrumentProvider';
-import { useTheme } from 'store/ThemeContext';
-import TrendingNow from 'components/trending-now';
-import ActivityCompare from 'components/activity-compare';
-import CustomChart from 'components/CustomChart';
+import React from 'react'
+import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
+import SentimentChart from './SentimentChart' // Make sure the path is correct
+import { InstrumentProps } from '../../../store/InstrumentProvider'
+import { useTheme } from '../../../store/themeContext'
+import ActivityComparison from './ActivityComparison'
+import CustomChart from './CustomChart'
+import { Box } from '@mui/material'
 
+const InstrumentDetails = ({ selectedInstrument }: { selectedInstrument: InstrumentProps | null }) => {
+	const theme = useTheme()
 
-// Assuming you have a service to fetch the instrument details
-import { fetchInstrumentDetails } from 'services/instrumentService';
+	if (!selectedInstrument) {
+		return (
+			<Box
+				sx={{
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					height: '100vh', // Adjust height as needed
+					backgroundColor: theme.BACKGROUND,
+				}}>
+				<Typography variant='h6' sx={{ color: theme.TERTIARY }}>
+					Loading or no instrument selected...
+				</Typography>
+			</Box>
+		)
+	}
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-  backButton: {
-    marginRight: theme.spacing(2),
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: theme.spacing(2),
-  },
-  // Add your styles here
-}));
+	return (
+		<Grid container sx={{ padding: 5, backgroundColor: theme.BACKGROUND }}>
+			<Grid item xs={12} sx={{ textAlign: 'center', marginBottom: 5 }}>
+				<Typography variant='h4' sx={{ color: theme.TERTIARY }}>
+					{selectedInstrument.crypto}
+				</Typography>
+			</Grid>
+			<Grid item container spacing={2}>
+				<Grid
+					item
+					xs={6}
+					md={5}
+					sx={{
+						border: `1px solid ${theme.HINT}`,
+						borderRadius: '20px',
+						padding: '8px',
+					}}>
+					<Typography variant='h6' sx={{ color: theme.TERTIARY }}>
+						Sentiment Details
+					</Typography>
+					<SentimentChart selectedInstrument={selectedInstrument} />
+				</Grid>
+				<Grid item xs={12} md={6}>
+					<ActivityComparison selectedInstrument={selectedInstrument} />
+				</Grid>
+			</Grid>
 
-export default function InstrumentDetails() {
-  const classes = useStyles();
-  const theme = useTheme();
-  const history = useHistory();
-  const { instrumentId } = useParams();
-  const [instrument, setInstrument] = useState<InstrumentProps | null>(null);
-
-  useEffect(() => {
-    if (instrumentId) {
-      fetchInstrumentDetails(instrumentId).then(setInstrument);
-    }
-  }, [instrumentId]);
-
-  if (!instrument) {
-    return (
-      <Paper className={classes.root} style={{ backgroundColor: theme.BACKGROUND }}>
-        <Typography variant="h5" color="textSecondary">
-          There is no instrument data
-        </Typography>
-      </Paper>
-    );
-  }
-
-  const formattedUpdateDate = formatLongDate(new Date(instrument.datetime * 1000));
-
-  return (
-    <Paper className={classes.root} style={{ backgroundColor: theme.BACKGROUND }}>
-      <div className={classes.header}>
-        <IconButton className={classes.backButton} onClick={() => history.goBack()}>
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography variant="h4">
-          Instrument Details
-        </Typography>
-      </div>
-      <TrendingNow instrument={instrument} />
-      <ActivityCompare
-        title="Today's Activity vs Week's"
-        activity={instrument.activityWeekly}
-      />
-      <ActivityCompare
-        title="Today's Activity vs Yesterday's"
-        activity={instrument.activityDaily}
-      />
-      <CustomChart instrument={instrument} />
-      <Typography variant="body2" color="textSecondary">
-        {`Update time: ${formattedUpdateDate}`}
-      </Typography>
-    </Paper>
-  );
+			<Grid item xs={12} sx={{ marginTop: 2 }}>
+				<CustomChart selectedInstrument={selectedInstrument} />
+			</Grid>
+		</Grid>
+	)
 }
+
+export default InstrumentDetails

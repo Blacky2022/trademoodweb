@@ -1,60 +1,84 @@
-import React, { useState, useEffect } from 'react';
-import { InstrumentProps, useInstrument } from '../../store/InstrumentProvider';
-import './TrendsView.css'
+import React, { useState, useEffect } from 'react'
+import TextField from '@mui/material/TextField'
+import Grid from '@mui/material/Grid'
+import { InstrumentProps, useInstrument } from '../../store/InstrumentProvider'
+import InstrumentRecord from '../../components/instrument-record/InstrumentRecord'
+import { useTheme } from '../../store/themeContext' // Importing useTheme
+import InstrumentDetails from './InstrumentDetails/InstrumentDetails'
+
 const TrendsView = () => {
-  const instruments = useInstrument();
-  const [search, setSearch] = useState('');
-  const [filteredInstruments, setFilteredInstruments] = useState(instruments);
-  const [selectedInstrument, setSelectedInstrument] = useState<InstrumentProps | null>(null);
+	const { toggleTheme, PRIMARY, SECONDARY, TERTIARY, QUATERNARY, BACKGROUND, HINT, LIGHT_HINT, NEGATIVE, POSITIVE } =
+		useTheme() // Using useTheme to get the colors
 
+	const instruments = useInstrument()
+	const [search, setSearch] = useState('')
+	const [filteredInstruments, setFilteredInstruments] = useState(instruments)
+	const [selectedInstrument, setSelectedInstrument] = useState<InstrumentProps | null>(null)
 
-  useEffect(() => {
-    if (search) {
-      const filtered = instruments?.filter((instrument) =>
-        instrument.crypto.toLowerCase().includes(search.toLowerCase()) ||
-        instrument.cryptoSymbol.toLowerCase().includes(search.toLowerCase()) ||
-        instrument.overallSentiment.toLowerCase().includes(search.toLowerCase())
-      );
-      setFilteredInstruments(filtered);
-    } else {
-      setFilteredInstruments(instruments);
-    }
-  }, [search, instruments]);
+	useEffect(() => {
+		if (search) {
+			const filtered = instruments?.filter(
+				instrument =>
+					instrument.crypto.toLowerCase().includes(search.toLowerCase()) ||
+					instrument.cryptoSymbol.toLowerCase().includes(search.toLowerCase()) ||
+					instrument.overallSentiment.toLowerCase().includes(search.toLowerCase())
+			)
+			setFilteredInstruments(filtered)
+		} else {
+			setFilteredInstruments(instruments)
+		}
+	}, [search, instruments])
 
-  return (
-    <div className="trends-view">
-      <div className="search-list">
-        <input
-          type="text"
-          placeholder="ex. Bitcoin"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <div className="instrument-list">
-          {filteredInstruments?.map((instrument) => (
-            <div
-              key={instrument.id}
-              className={`instrument ${selectedInstrument?.id === instrument.id ? 'selected' : ''}`}
-              onClick={() => setSelectedInstrument(instrument)}
-            >
-              {instrument.crypto}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="instrument-details">
-        {selectedInstrument ? (
-          <div>
-            {/* Display the details of the selected instrument */}
-            <h2>{selectedInstrument.crypto}</h2>
-            {/* ... other details ... */}
-          </div>
-        ) : (
-          <div>Select an instrument to see the details</div>
-        )}
-      </div>
-    </div>
-  );
-};
+	return (
+		<Grid container sx={{ height: '100vh', backgroundColor: BACKGROUND, color: LIGHT_HINT }}>
+			<Grid
+				item
+				xs={12}
+				md={4}
+				sx={{
+					overflowY: 'auto',
+					scrollbarWidth: 'none',
+					'&::-webkit-scrollbar': { display: 'none' },
+					borderRight: `1px solid ${HINT}`,
+					height: '100vh',
+				}}>
+				<TextField
+					label='Search'
+					variant='outlined'
+					value={search}
+					onChange={e => setSearch(e.target.value)}
+					placeholder='ex. Bitcoin'
+					sx={{
+						width: '100%',
+						mb: 2,
+						backgroundColor: TERTIARY,
+						color: LIGHT_HINT,
+						input: { color: LIGHT_HINT },
+						'.MuiOutlinedInput-notchedOutline': { borderColor: LIGHT_HINT },
+					}}
+				/>
+	
+				{filteredInstruments?.map(instrument => (
+					<InstrumentRecord
+						key={instrument.id}
+						crypto={instrument.crypto}
+						overallSentiment={instrument.overallSentiment}
+						sentimentDirection={instrument.sentimentDirection}
+						photoUrl={instrument.photoUrl}
+						isSelected={selectedInstrument?.id === instrument.id}
+						onPress={() => setSelectedInstrument(instrument)}
+					/>
+				))}
+			</Grid>
+			<Grid item xs={12} md={8} sx={{ p: 2 }}>
+			
+					<div>
+						<InstrumentDetails selectedInstrument={selectedInstrument} />
+					</div>
+			
+			</Grid>
+		</Grid>
+	)
+}
 
-export default TrendsView;
+export default TrendsView

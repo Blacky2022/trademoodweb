@@ -7,21 +7,21 @@ import { Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 const options = {
-    responsive: true, 
-    maintainAspectRatio: false,  
-    cutout: '50%', 
-    plugins: {
-      legend: {
-        display: true, 
-        position: 'top', 
-      },
-      tooltip: {
-        enabled: true, 
-        mode: 'index',
-        intersect: false,
-      },
+  responsive: true,
+  maintainAspectRatio: false,
+  cutout: '50%',
+  plugins: {
+    legend: {
+      display: true,
+      position: 'top' as const, 
     },
-  };
+    tooltip: {
+      enabled: true,
+      mode: 'index' as any,
+      intersect: false,
+    },
+  },
+};
 type TrendingNowProps = {
     name?: string;
     title: string ;
@@ -48,7 +48,7 @@ function TrendingNow({ name, title, positive, neutral, negative, onPress, trendi
       borderWidth: 0, 
     }]
   });
-  // Legend item component
+
   const LegendItem = ({ color, text, value }: LegendItemProps) => (
     <div className="legendContainer">
       <span className="dot" style={{ backgroundColor: color }}></span>
@@ -72,13 +72,13 @@ function TrendingNow({ name, title, positive, neutral, negative, onPress, trendi
             <span className="buttonText">
               <FormattedMessage defaultMessage='Details' id='trendingNow.details' />
             </span>
-            <GoForwardIcon className="goForwardIcon" />
+            <GoForwardIcon />
           </button>
         )}
       </div>
       <div className="bottomContainer">
         <div className="chart">
-    <Doughnut data={getPieChartData()} options={{ options }} />
+    <Doughnut data={getPieChartData()} options={options } />
   </div>
         <div className="details">
           {trendingWidget && (

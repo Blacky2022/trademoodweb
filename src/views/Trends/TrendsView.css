@@ -1,31 +1,56 @@
+
 .trends-view {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .search-list {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .instrument-list {
-    overflow-y: auto;
-    max-height: 400px; /* Adjust based on your layout */
-  }
-  
-  .instrument {
-    padding: 0.5rem;
-    cursor: pointer;
-  }
-  
-  .instrument.selected {
-    background-color: lightblue; /* Highlight the selected instrument */
-  }
-  
-  .instrument-details {
-    padding: 0.5rem;
-    border-left: 1px solid #ccc; /* A border to separate from the list */
-  }
-  
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.search-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.instrument-list {
+  overflow-y: auto;
+  max-height: 400px; 
+}
+
+.instrument {
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 10px;image */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s; 
+}
+
+.instrument-details {
+  padding: 0.5rem;
+  border-left: 1px solid #ccc; 
+}
+
+.instrument-selected {
+  background-color: #4CAF50; 
+  color: #fff; 
+}
+
+.instrument:not(.instrument-selected) {
+  background-color: #fff; 
+  color: #333; 
+}
+
+.arrow-indicator {
+  position: absolute;
+  right: 10px; 
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #fff; 
+}
+
+.instrument-selected .arrow-indicator::after {
+  content: '\f105'; 
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900; 
+}
+

@@ -1,0 +1,22 @@
+.container {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px; 
+    padding: 12px;
+    margin: 20px 0;
+  }
+  
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+  }
+  
+  .legendContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px; 
+    margin-top: 4px;
+  }
+  
