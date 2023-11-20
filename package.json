@@ -24,6 +24,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
+    "react-image-crop": "^10.1.8",
     "react-intl": "^6.5.1",
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
@@ -58,8 +59,10 @@
   },
   "devDependencies": {
     "@mui/icons-material": "^5.14.15",
+    "@svgr/webpack": "^8.1.0",
     "@types/firebase": "^3.2.1",
     "@types/react-router-dom": "^5.3.3",
-    "file-loader": "^6.2.0"
+    "file-loader": "^6.2.0",
+    "url-loader": "^4.1.1"
   }
 }
