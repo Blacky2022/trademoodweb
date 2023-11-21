@@ -67,6 +67,7 @@ const EditPersonalInfo: React.FC = () => {
 						'& .MuiOutlinedInput-root': {
 							fontSize: '1rem',
 							color: TERTIARY,
+							
 							'& fieldset': {
 								borderColor: TERTIARY,
 							},

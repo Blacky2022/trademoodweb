@@ -28,7 +28,7 @@ export default function UserProfileComponent({
 }: UserInfoProps) {
 	const { user } = useAuth()
 	const intl = useIntl()
-	const { toggleTheme, PRIMARY, SECONDARY, TERTIARY, QUATERNARY, BACKGROUND, HINT, LIGHT_HINT, NEGATIVE, POSITIVE } =
+	const { TERTIARY} =
 		useTheme()
 	const { getFollowersCount, getFollowingCount } = useFollowing()
 	const [followers, setFollowers] = useState(0)
