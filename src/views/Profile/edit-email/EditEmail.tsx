@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
-import { TextField, Button, CircularProgress } from '@mui/material'
+import { TextField, Button, CircularProgress, Typography } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import { useAuth } from '../../../store/AuthProvider'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './validationSchema'
-import { useIntl} from 'react-intl'
+import { useIntl } from 'react-intl'
+import { useTheme } from '../../../store/themeContext'
 
 const EditEmail = () => {
 	const { updateEmail } = useAuth()
+	const { toggleTheme, PRIMARY, SECONDARY, TERTIARY, QUATERNARY, BACKGROUND, HINT, LIGHT_HINT, NEGATIVE, POSITIVE } =
+		useTheme()
 	const [isLoading, setIsLoading] = useState(false)
 	const { formatMessage } = useIntl()
 	const {
@@ -19,7 +22,6 @@ const EditEmail = () => {
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
-
 	const onSubmit = async (data: { newEmail: string }) => {
 		try {
 			setIsLoading(true)
@@ -52,9 +54,14 @@ const EditEmail = () => {
 	}
 	return (
 		<div className='form-section'>
-			<h2>
-				<h2>{formatMessage({ id: 'editEmail.title' })}</h2>
-			</h2>
+			<Typography
+				variant='h5'
+				sx={{
+					color: TERTIARY,
+					marginBottom: 2,
+				}}>
+				{formatMessage({ id: 'editEmail.title' })}
+			</Typography>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Controller
 					name='newEmail'
@@ -67,13 +74,45 @@ const EditEmail = () => {
 							fullWidth
 							error={!!errors.newEmail}
 							helperText={errors.newEmail?.message}
+							sx={{
+								'& .MuiOutlinedInput-root': {
+									fontSize: '1rem',
+									color: TERTIARY,
+									'& fieldset': {
+										borderColor: TERTIARY,
+									},
+									'&:hover fieldset': {
+										borderColor: TERTIARY,
+									},
+									'&.Mui-focused fieldset': {
+										borderColor: TERTIARY,
+									},
+								},
+								'& .MuiInputLabel-outlined': {
+									color: TERTIARY,
+								},
+								'& .Mui-focused .MuiInputLabel-outlined': {
+									color: TERTIARY,
+								},
+								'& .MuiFormHelperText-root': {
+									color: NEGATIVE, // Assuming error messages are to be styled with a "negative" color
+								},
+							}}
 						/>
 					)}
 				/>
 				<Button
 					variant='contained'
-					color='primary'
-					startIcon={isLoading ? <CircularProgress size={20} /> : <EditIcon />}
+					sx={{
+						bgcolor: PRIMARY,
+						color: TERTIARY,
+						'&:hover': {
+							bgcolor: QUATERNARY,
+						},
+						marginTop: 2,
+						marginBottom: 1,
+					}}
+					startIcon={isLoading ? <CircularProgress size={20} color='inherit' /> : <EditIcon />}
 					onClick={handleSubmit(onSubmit)}
 					fullWidth
 					disabled={isLoading}>

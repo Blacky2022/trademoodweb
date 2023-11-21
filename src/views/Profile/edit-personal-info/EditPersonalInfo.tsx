@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { TextField, Button, CircularProgress } from '@mui/material'
+import { TextField, Button, CircularProgress, Typography } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import { useAuth } from '../../../store/AuthProvider'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from './validationSchema'
-import { useIntl } from 'react-intl' 
+import { useIntl } from 'react-intl'
+import { useTheme } from '../../../store/themeContext'
 
 interface IFormInput {
 	firstName: string
@@ -13,9 +14,12 @@ interface IFormInput {
 }
 
 const EditPersonalInfo: React.FC = () => {
+	const [imageUrl, setImageUrl] = useState<string | null>(null)
+	const { toggleTheme, PRIMARY, SECONDARY, TERTIARY, QUATERNARY, BACKGROUND, HINT, LIGHT_HINT, NEGATIVE, POSITIVE } =
+		useTheme()
 	const { updatePersonalData } = useAuth()
 	const [loading, setLoading] = useState(false)
-	const { formatMessage } = useIntl() 
+	const { formatMessage } = useIntl()
 	const {
 		handleSubmit,
 		register,
@@ -44,7 +48,14 @@ const EditPersonalInfo: React.FC = () => {
 
 	return (
 		<div className='form-section'>
-			<h2>{formatMessage({ id: 'editPersonalInfo.title' })}</h2>
+			<Typography
+				variant='h5'
+				sx={{
+					color: TERTIARY,
+					marginBottom: 2,
+				}}>
+				{formatMessage({ id: 'editPersonalInfo.title' })}
+			</Typography>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<TextField
 					{...register('firstName')}
@@ -52,6 +63,31 @@ const EditPersonalInfo: React.FC = () => {
 					error={!!errors.firstName}
 					helperText={errors.firstName?.message}
 					fullWidth
+					sx={{
+						'& .MuiOutlinedInput-root': {
+							fontSize: '1rem',
+							color: TERTIARY,
+							'& fieldset': {
+								borderColor: TERTIARY,
+							},
+							'&:hover fieldset': {
+								borderColor: TERTIARY,
+							},
+							'&.Mui-focused fieldset': {
+								borderColor: TERTIARY,
+							},
+						},
+						'& .MuiInputLabel-outlined': {
+							color: TERTIARY,
+						},
+						'& .Mui-focused .MuiInputLabel-outlined': {
+							color: TERTIARY,
+						},
+						'& .MuiFormHelperText-root': {
+							color: NEGATIVE,
+						},
+						mb: 2, // margin-bottom
+					}}
 				/>
 				<TextField
 					{...register('lastName')}
@@ -59,12 +95,45 @@ const EditPersonalInfo: React.FC = () => {
 					error={!!errors.lastName}
 					helperText={errors.lastName?.message}
 					fullWidth
+					sx={{
+						'& .MuiOutlinedInput-root': {
+							fontSize: '1rem',
+							color: TERTIARY,
+							'& fieldset': {
+								borderColor: TERTIARY,
+							},
+							'&:hover fieldset': {
+								borderColor: TERTIARY,
+							},
+							'&.Mui-focused fieldset': {
+								borderColor: TERTIARY,
+							},
+						},
+						'& .MuiInputLabel-outlined': {
+							color: TERTIARY,
+						},
+						'& .Mui-focused .MuiInputLabel-outlined': {
+							color: TERTIARY,
+						},
+						'& .MuiFormHelperText-root': {
+							color: NEGATIVE,
+						},
+						mb: 2, // margin-bottom
+					}}
 				/>
 				<Button
 					type='submit'
 					variant='contained'
-					color='primary'
-					startIcon={loading ? <CircularProgress size={20} /> : <EditIcon />}
+					sx={{
+						bgcolor: PRIMARY,
+						color: TERTIARY,
+						'&:hover': {
+							bgcolor: QUATERNARY,
+						},
+						mt: 1, // margin-top
+						mb: 2, // margin-bottom
+					}}
+					startIcon={loading ? <CircularProgress size={20} color='inherit' /> : <EditIcon />}
 					fullWidth
 					disabled={loading}>
 					{formatMessage({ id: 'editPersonalInfo.updateButton' })}
