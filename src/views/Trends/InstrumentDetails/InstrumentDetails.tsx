@@ -1,15 +1,31 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import SentimentChart from './SentimentChart' // Make sure the path is correct
-import { InstrumentProps } from '../../../store/InstrumentProvider'
-import { useTheme } from '../../../store/themeContext'
+import SentimentChart from './SentimentChart'
 import ActivityComparison from './ActivityComparison'
 import CustomChart from './CustomChart'
-import { Box } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
+import BookmarkIcon from '@mui/icons-material/Bookmark'
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+import { InstrumentProps } from '../../../store/InstrumentProvider'
+import { useTheme } from '../../../store/themeContext'
+import { FavoritesContext } from '../../../store/FavoritesProvider'
 
 const InstrumentDetails = ({ selectedInstrument }: { selectedInstrument: InstrumentProps | null }) => {
 	const theme = useTheme()
+	const { ids, addFavorite, removeFavorite } = useContext(FavoritesContext)
+
+	const isFavorite = ids.includes(selectedInstrument?.id || '')
+
+	const handleFavoriteClick = () => {
+		if (selectedInstrument && selectedInstrument.id) {
+			if (isFavorite) {
+				removeFavorite(selectedInstrument.id)
+			} else {
+				addFavorite(selectedInstrument.id)
+			}
+		}
+	}
 
 	if (!selectedInstrument) {
 		return (
@@ -18,7 +34,7 @@ const InstrumentDetails = ({ selectedInstrument }: { selectedInstrument: Instrum
 					display: 'flex',
 					justifyContent: 'center',
 					alignItems: 'center',
-					height: '100vh', // Adjust height as needed
+					height: '100vh',
 					backgroundColor: theme.BACKGROUND,
 				}}>
 				<Typography variant='h6' sx={{ color: theme.TERTIARY }}>
@@ -29,11 +45,25 @@ const InstrumentDetails = ({ selectedInstrument }: { selectedInstrument: Instrum
 	}
 
 	return (
-		<Grid container sx={{ padding: 5, backgroundColor: theme.BACKGROUND }}>
+		<Grid container sx={{ padding: 2, backgroundColor: theme.BACKGROUND }}>
 			<Grid item xs={12} sx={{ textAlign: 'center', marginBottom: 5 }}>
 				<Typography variant='h4' sx={{ color: theme.TERTIARY }}>
-					{selectedInstrument.crypto}
+					{selectedInstrument.crypto}	
 				</Typography>
+				<IconButton
+					onClick={handleFavoriteClick}
+					sx={{
+						position: 'relative',
+						bottom: '2.5vw', // adjust as needed
+						left: '20vw', // adjust as needed
+						fontSize: '3rem', // adjust icon size as needed
+					}}>
+					{isFavorite ? (
+						<BookmarkIcon sx={{ fontSize: 'inherit', color: theme.TERTIARY  }} />
+					) : (
+						<BookmarkBorderIcon sx={{ fontSize: 'inherit', color:theme.TERTIARY }} />
+					)}
+				</IconButton>
 			</Grid>
 			<Grid item container spacing={2}>
 				<Grid
@@ -43,7 +73,7 @@ const InstrumentDetails = ({ selectedInstrument }: { selectedInstrument: Instrum
 					sx={{
 						border: `1px solid ${theme.HINT}`,
 						borderRadius: '20px',
-						padding: '8px',
+						padding: '2px',
 					}}>
 					<Typography variant='h6' sx={{ color: theme.TERTIARY }}>
 						Sentiment Details
@@ -55,7 +85,7 @@ const InstrumentDetails = ({ selectedInstrument }: { selectedInstrument: Instrum
 				</Grid>
 			</Grid>
 
-			<Grid item xs={12} sx={{ marginTop: 2 }}>
+			<Grid item xs={12} sx={{ marginTop: 1 }}>
 				<CustomChart selectedInstrument={selectedInstrument} />
 			</Grid>
 		</Grid>

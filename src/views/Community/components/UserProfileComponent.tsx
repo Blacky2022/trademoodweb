@@ -9,6 +9,7 @@ import { usePosts } from '../../../store/PostsProvider'
 import PostComponent from './PostComponent'
 import { doc, getDoc } from 'firebase/firestore'
 import { firestore } from '../../../config/firebase-config'
+
 type UserInfoProps = {
 	userUID?: string
 	photoURL?: string
