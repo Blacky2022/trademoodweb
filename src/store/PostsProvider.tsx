@@ -63,31 +63,31 @@ export function PostsContextProvider({ children }: PostsContextProviderProps) {
 
 	async function fetchPosts() {
 		setIsLoading(true)
-		const subscriber = onSnapshot(collection(firestore,'posts'),querySnapshot => {
-				try {
-					const posts: PostType[] = []
-					querySnapshot.forEach(documentSnapshot => {
-						const data = documentSnapshot.data()
-						if (data.createdAt) {
-							posts.push({
-								createdAt: data.createdAt.seconds * 1000 + data.createdAt.nanoseconds / 1000000,
-								key: documentSnapshot.id,
-								likes: data.likes,
-								text: data.text,
-								uid: documentSnapshot.id,
-								userUID: data.userUID,
-							})
-						}
-					})
+		const subscriber = onSnapshot(collection(firestore, 'posts'), querySnapshot => {
+			try {
+				const posts: PostType[] = []
+				querySnapshot.forEach(documentSnapshot => {
+					const data = documentSnapshot.data()
+					if (data.createdAt) {
+						posts.push({
+							createdAt: data.createdAt.seconds * 1000 + data.createdAt.nanoseconds / 1000000,
+							key: documentSnapshot.id,
+							likes: data.likes,
+							text: data.text,
+							uid: documentSnapshot.id,
+							userUID: data.userUID,
+						})
+					}
+				})
 
-					const sortedPosts = [...posts].sort((a, b) => b.createdAt - a.createdAt)
-					setPosts(sortedPosts)
-					setIsLoading(false)
-				} catch (error) {
-					console.error('Error occurred while downloading data:', error)
-					setIsLoading(false)
-				}
-			})
+				const sortedPosts = [...posts].sort((a, b) => b.createdAt - a.createdAt)
+				setPosts(sortedPosts)
+				setIsLoading(false)
+			} catch (error) {
+				console.error('Error occurred while downloading data:', error)
+				setIsLoading(false)
+			}
+		})
 		return () => subscriber()
 	}
 
@@ -95,11 +95,11 @@ export function PostsContextProvider({ children }: PostsContextProviderProps) {
 		if (postText.length > 0 && user) {
 			try {
 				const postRef = await addDoc(collection(firestore, 'posts'), {
-                    likes: [],
-                    text: postText,
-                    createdAt: serverTimestamp(),
-                    userUID: user.uid,
-                });
+					likes: [],
+					text: postText,
+					createdAt: serverTimestamp(),
+					userUID: user.uid,
+				})
 
 				const newPost: PostType = {
 					createdAt: new Date().getTime(),
@@ -108,7 +108,7 @@ export function PostsContextProvider({ children }: PostsContextProviderProps) {
 					uid: postRef.id,
 					userUID: user.uid,
 				}
-				setPosts([...posts, newPost])
+				setPosts(prevPosts => [...prevPosts, newPost])
 			} catch (error) {
 				console.log('An error occurred while trying to add a post: ', error)
 			}
@@ -117,8 +117,8 @@ export function PostsContextProvider({ children }: PostsContextProviderProps) {
 
 	async function deletePost(postUID: string) {
 		try {
-            const postRef = doc(firestore, 'posts', postUID);
-			await deleteDoc(postRef);
+			const postRef = doc(firestore, 'posts', postUID)
+			await deleteDoc(postRef)
 			const updatedPosts = posts.filter(post => post.uid !== postUID)
 			setPosts(updatedPosts)
 		} catch (error) {
@@ -135,9 +135,9 @@ export function PostsContextProvider({ children }: PostsContextProviderProps) {
 			likes.splice(userIndex, 1)
 		}
 
-		const postRef = doc(firestore, 'posts', postUID);
+		const postRef = doc(firestore, 'posts', postUID)
 		try {
-			await updateDoc(postRef, { likes });
+			await updateDoc(postRef, { likes })
 		} catch (error) {
 			console.log('Error occurred while updating firebase collection:  ', error)
 		}

@@ -3,21 +3,6 @@ body {
   font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
-}
-
-
-/* Dark Theme (Default) */
-:root {
-  --primary-color: #2E5C6A;
-  --secondary-color: #9FB2C3;
-  --tertiary-color: #FAFAFA; 
-  --quaternary-color: #1C1C1C;
-  --background-color: #0A2129;
-  --hint-color: #AFAFAF;
-  --light-hint-color: #13333F;
-  --negative-color: #FF5A5A;
-  --positive-color: #5AD37A;
-
   background-color: var(--background-color);
-
 }
+
