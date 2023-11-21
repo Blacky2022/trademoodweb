@@ -1,27 +1,36 @@
-import React, {useState } from 'react'
+import React, { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { useTheme } from '../../../store/themeContext'
 import { useAuth } from '../../../store/AuthProvider'
 
 import { usePosts } from '../../../store/PostsProvider'
 import SendIcon from '@mui/icons-material/Send'
-import { IconButton, TextField, Box} from '@mui/material'
+import { IconButton, TextField, Box } from '@mui/material'
 type DiscussionTextAreaProps = {
 	isProfileImage?: boolean
 }
 
 export default function DiscussionTextArea({ isProfileImage = true }: DiscussionTextAreaProps) {
-	const { TERTIARY,BACKGROUND, } =
-		useTheme()
+	const { TERTIARY, BACKGROUND } = useTheme()
 	const intl = useIntl()
 	const { user } = useAuth()
 	const { addPost } = usePosts()
 	const [text, setText] = useState('')
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const maxInputLength = 280
 	const handlePost = () => {
-		addPost(text)
-		setText('')
+		if (text.trim() && !isSubmitting) {
+			setIsSubmitting(true)
+			try {
+				addPost(text.trim())
+				setText('')
+			} catch (error) {
+				console.error('An error occurred:', error)
+			}
+			setIsSubmitting(false)
+		}
 	}
+
 	return (
 		<Box
 			sx={{
@@ -31,9 +40,9 @@ export default function DiscussionTextArea({ isProfileImage = true }: Discussion
 				marginBottom: 2,
 				backgroundColor: BACKGROUND,
 				borderRadius: '20px',
-				padding: '10px 16px', 
-				boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)', 
-				border: `2px solid ${TERTIARY}`, 
+				padding: '10px 16px',
+				boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+				border: `2px solid ${TERTIARY}`,
 			}}>
 			{isProfileImage && user?.photoURL && (
 				<Box
@@ -42,7 +51,7 @@ export default function DiscussionTextArea({ isProfileImage = true }: Discussion
 						height: 55,
 						overflow: 'hidden',
 						borderRadius: '50%',
-						boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.15)', 
+						boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.15)',
 					}}>
 					<img
 						src={user.photoURL}
@@ -50,7 +59,7 @@ export default function DiscussionTextArea({ isProfileImage = true }: Discussion
 						style={{
 							width: '100%',
 							height: '100%',
-							objectFit: 'cover', 
+							objectFit: 'cover',
 						}}
 					/>
 				</Box>
@@ -60,34 +69,29 @@ export default function DiscussionTextArea({ isProfileImage = true }: Discussion
 				placeholder='shareSomething'
 				inputProps={{ maxLength: maxInputLength }}
 				multiline
-				rows={1} 
+				rows={1}
 				value={text}
 				onChange={e => setText(e.target.value)}
 				sx={{
 					'& .MuiOutlinedInput-root': {
 						border: 'none',
-						'& fieldset': { display: 'none' }, 
+						'& fieldset': { display: 'none' },
 					},
 					'& .MuiInputBase-input': {
-						color: TERTIARY, 
+						color: TERTIARY,
 					},
 				}}
 			/>
 			<IconButton
 				onClick={handlePost}
+				disabled={!text.trim() || isSubmitting}
 				sx={{
-					color: TERTIARY, 
+					color: TERTIARY,
 					'&:hover': {
-						backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+						backgroundColor: 'rgba(255, 255, 255, 0.1)',
 					},
 				}}>
-				<IconButton
-					onClick={handlePost}
-					sx={{
-						color: TERTIARY,
-					}}>
-					<SendIcon />
-				</IconButton>
+				<SendIcon />
 			</IconButton>
 		</Box>
 	)

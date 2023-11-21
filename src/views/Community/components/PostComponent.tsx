@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react'
-import { Box } from '@mui/material'
+import { Box, Tooltip } from '@mui/material'
 import { useAuth } from '../../../store/AuthProvider'
 import { useTheme } from '../../../store/themeContext'
 import { PostType, usePosts } from '../../../store/PostsProvider'
@@ -11,7 +11,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
-
+import DeleteIcon from '@mui/icons-material/Delete'
 interface PostProps extends PostType {
 	setSelectedPost: (post: PostType) => void
 	isSelected: boolean
@@ -19,10 +19,9 @@ interface PostProps extends PostType {
 
 const PostComponent: React.FC<PostProps> = ({ createdAt, likes, text, uid, userUID, setSelectedPost, isSelected }) => {
 	const imageSize = 40
-	const {  TERTIARY, BACKGROUND,  LIGHT_HINT} =
-		useTheme()
+	const { TERTIARY, BACKGROUND, LIGHT_HINT, NEGATIVE } = useTheme()
 	const { user } = useAuth()
-	const { toggleLikePost } = usePosts()
+	const { toggleLikePost, deletePost } = usePosts()
 
 	const date = new Date(createdAt)
 	const [photoURL, setPhotoURL] = useState()
@@ -58,13 +57,16 @@ const PostComponent: React.FC<PostProps> = ({ createdAt, likes, text, uid, userU
 			}
 		}
 	}
+	const handleDeletePost = async () => {
+		await deletePost(uid)
+	}
 
 	return (
 		<ListItem
 			alignItems='flex-start'
 			sx={{
 				width: '95%',
-				bgcolor: isSelected ? LIGHT_HINT : BACKGROUND, 
+				bgcolor: isSelected ? LIGHT_HINT : BACKGROUND,
 				borderRadius: '16px',
 				overflow: 'hidden',
 				mb: 2,
@@ -87,7 +89,7 @@ const PostComponent: React.FC<PostProps> = ({ createdAt, likes, text, uid, userU
 						{displayName}
 					</Typography>
 				</Box>
-				{!isPostByCurrentUser && (
+				{!isPostByCurrentUser ? (
 					<Button
 						startIcon={isFollowingState ? <PersonRemoveIcon /> : <PersonAddIcon />}
 						variant='outlined'
@@ -95,6 +97,19 @@ const PostComponent: React.FC<PostProps> = ({ createdAt, likes, text, uid, userU
 						onClick={() => toggleFollowUser(userUID)}>
 						{isFollowingState ? 'Unfollow' : 'Follow'}
 					</Button>
+				) : (
+					<Tooltip title='Delete post' placement='top'>
+						<IconButton
+							onClick={handleDeletePost}
+							sx={{
+								color: 'red',
+								'&:hover': {
+									backgroundColor: LIGHT_HINT,
+								},
+							}}>
+							<DeleteIcon fontSize='medium' />
+						</IconButton>
+					</Tooltip>
 				)}
 			</Box>
 
@@ -103,7 +118,6 @@ const PostComponent: React.FC<PostProps> = ({ createdAt, likes, text, uid, userU
 			</Typography>
 
 			<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-			
 				{!isPostByCurrentUser && user && (
 					<IconButton onClick={() => user && toggleLikePost(uid, user.uid, likes)}>
 						{likes.includes(user.uid) ? <FavoriteIcon color='error' /> : <FavoriteBorderIcon />}
