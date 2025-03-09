@@ -1,46 +1,40 @@
-# Getting Started with Create React App
+# TradeMood 📈💡
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**A web application for monitoring and forecasting investor sentiments using AI and real-time data.**
 
-## Available Scripts
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Overview 🌍
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+TradeMood is a web application designed to analyze investor sentiment based on real-time financial data. It integrates AI-based sentiment analysis and provides insights into market trends, helping investors make informed decisions.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+![image](https://github.com/user-attachments/assets/7a5926f7-22b4-441e-8df1-fcace59bb5dd)
 
-### `npm test`
+![image](https://github.com/user-attachments/assets/0cb95d2b-9431-4af7-8bd2-573475a0cce1)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![image](https://github.com/user-attachments/assets/c377418a-20a0-429d-8714-7cfd18418454)
 
-### `npm run build`
+![image](https://github.com/user-attachments/assets/0186fb39-a1c9-4343-bf51-1e38cfb7c3c2)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Key Highlights
+- **AI-powered sentiment analysis** on financial data.
+- **Real-time market insights** for investors.
+- **Cross-platform compatibility** with a web and mobile interface.
+- **User-friendly dashboard** with data visualization.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Features 🚀
 
-### `npm run eject`
+- 📊 **Market Sentiment Analysis** – Uses AI to predict investor mood based on financial data.
+- 🔍 **Real-Time Data Processing** – Fetches and processes stock market trends.
+- 🎨 **Interactive UI** – Built with **React** for a smooth user experience.
+- 🔗 **Firebase Integration** – Ensures seamless access across devices.
+- ⚡ **Secure Authentication** – Integrated with **Azure B2C** for secure user access.
+- 📡 **API-Driven Architecture** – Fetches financial data from external sources.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Backend: https://github.com/dnicalek/TradeMood
+## Backend: https://github.com/dnicalek/TradeMood
+## Mobile App: https://github.com/nogowicz/TradeMood
