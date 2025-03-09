@@ -36,7 +36,5 @@ TradeMood is a web application designed to analyze investor sentiment based on r
 - ⚡ **Secure Authentication** – Integrated with **Azure B2C** for secure user access.
 - 📡 **API-Driven Architecture** – Fetches financial data from external sources.
 
-
-Backend: https://github.com/dnicalek/TradeMood
 ## Backend: https://github.com/dnicalek/TradeMood
 ## Mobile App: https://github.com/nogowicz/TradeMood
